@@ -1,0 +1,405 @@
+@import "tailwindcss";
+
+/* ============================================
+   DESIGN SYSTEM — 蜀味坊 · 四川特产电商
+   Inspired by Airbnb + Apple + Vercel + Stripe + Nike + Starbucks + Shopify
+   ============================================ */
+
+@theme inline {
+  /* ---- Brand Colors (四川红 + 暖金) ---- */
+  --color-primary: #b91c1c;
+  --color-primary-active: #991b1b;
+  --color-primary-deep: #7f1d1d;
+  --color-primary-disabled: #fca5a5;
+  --color-primary-error-text: #c13515;
+
+  /* ---- Accent ---- */
+  --color-accent: #f59e0b;
+  --color-accent-light: #fde68a;
+  --color-accent-deep: #d97706;
+  --color-accent-bright: #fbbf24;
+
+  /* ---- Text ---- */
+  --color-ink: #171717;
+  --color-body: #4d4d4d;
+  --color-muted: #888888;
+  --color-muted-soft: #a1a1a1;
+
+  /* ---- Surfaces ---- */
+  --color-canvas: #ffffff;
+  --color-canvas-warm: #faf8f5;
+  --color-surface-soft: #f7f7f7;
+  --color-surface-card: #ffffff;
+  --color-surface-strong: #f2f2f2;
+  --color-on-primary: #ffffff;
+  --color-on-dark: #ffffff;
+
+  /* ---- Deep / Dark Surfaces (Sichuan-inspired) ---- */
+  --color-deep-bg: #1a0a0a;
+  --color-deep-bg-secondary: #2d0f0f;
+  --color-deep-bg-tertiary: #3d1414;
+  --color-deep-border: rgba(255, 255, 255, 0.08);
+  --color-deep-border-strong: rgba(255, 255, 255, 0.15);
+
+  /* ---- Borders ---- */
+  --color-hairline: #ebebeb;
+  --color-hairline-soft: #f0f0f0;
+  --color-border-strong: #a1a1a1;
+
+  /* ---- Semantic ---- */
+  --color-success: #059669;
+  --color-warning: #f59e0b;
+  --color-error: #dc2626;
+
+  /* ---- Fonts ---- */
+  --font-sans: "PingFang SC", "Microsoft YaHei", Inter, system-ui, -apple-system, sans-serif;
+  --font-mono: "SF Mono", "Fira Code", monospace;
+}
+
+/* ============================================
+   Base Styles
+   ============================================ */
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-body);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   Keyframe Animations
+   ============================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Lantern swing animation — Sichuan festive feel */
+@keyframes lanternSwing {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+/* Gentle pulse glow for decorative elements */
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.3; }
+}
+
+/* Corner ornament draw-in animation */
+@keyframes ornamentReveal {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-lantern {
+  animation: lanternSwing 2.5s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+.animate-ornament {
+  animation: ornamentReveal 0.6s ease-out forwards;
+}
+
+/* ============================================
+   Component Classes
+   ============================================ */
+
+/* Buttons */
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-[10px] px-7 py-3.5 text-[15px] font-semibold text-white;
+  background-color: var(--color-primary);
+  transition: all 0.2s ease;
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-active);
+  transform: scale(1.02);
+}
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-[10px] border px-7 py-3.5 text-[15px] font-semibold;
+  background-color: transparent;
+  color: var(--color-ink);
+  border-color: var(--color-hairline);
+  transition: all 0.2s ease;
+}
+.btn-secondary:hover {
+  border-color: var(--color-border-strong);
+  background-color: var(--color-surface-soft);
+}
+
+.btn-ghost {
+  @apply inline-flex items-center justify-center rounded-[10px] px-5 py-2.5 text-[14px] font-medium;
+  color: var(--color-body);
+  transition: all 0.2s ease;
+}
+.btn-ghost:hover {
+  background-color: var(--color-surface-soft);
+  color: var(--color-ink);
+}
+
+.btn-pill {
+  @apply inline-flex items-center justify-center rounded-full px-6 py-3 text-[14px] font-semibold text-white;
+  background-color: var(--color-primary);
+  transition: all 0.2s ease;
+}
+.btn-pill:hover {
+  background-color: var(--color-primary-active);
+  transform: scale(1.02);
+}
+
+/* Gold pill button — for dark/hero backgrounds */
+.btn-pill-gold {
+  @apply inline-flex items-center justify-center rounded-full px-6 py-3 text-[14px] font-semibold;
+  background-color: var(--color-accent);
+  color: #1a0a0a;
+  transition: all 0.2s ease;
+}
+.btn-pill-gold:hover {
+  background-color: var(--color-accent-bright);
+  transform: scale(1.02);
+}
+.btn-pill-gold:active {
+  transform: scale(0.98);
+}
+
+/* Outline on dark — Shopify-inspired */
+.btn-outline-dark {
+  @apply inline-flex items-center justify-center rounded-full px-6 py-3 text-[14px] font-semibold;
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+}
+.btn-outline-dark:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Cards */
+.card {
+  @apply rounded-[16px] bg-white overflow-hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+.card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+}
+
+/* Badge */
+.badge {
+  @apply inline-flex items-center rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide;
+}
+
+/* Section spacing */
+.section {
+  @apply py-20 md:py-28;
+}
+
+/* Container */
+.container-airbnb {
+  @apply mx-auto max-w-7xl px-5 sm:px-8 lg:px-12;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 50%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Shimmer loading */
+.shimmer {
+  background: linear-gradient(90deg, var(--color-surface-soft) 25%, var(--color-surface-strong) 50%, var(--color-surface-soft) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ============================================
+   Decorative Corner Ornaments
+   ============================================ */
+
+/* Container for corner ornaments */
+.ornament-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Individual corner ornament */
+.ornament {
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  opacity: 0.12;
+  animation: ornamentReveal 0.8s ease-out forwards;
+}
+
+.ornament-tl { top: 0; left: 0; }
+.ornament-tr { top: 0; right: 0; transform: scaleX(-1); }
+.ornament-bl { bottom: 0; left: 0; transform: scaleY(-1); }
+.ornament-br { bottom: 0; right: 0; transform: scale(-1, -1); }
+
+/* Gold variant for dark sections */
+.ornament-gold { opacity: 0.15; }
+.ornament-gold svg * { stroke: #f59e0b; }
+
+/* Red variant for light sections */
+.ornament-red { opacity: 0.1; }
+.ornament-red svg * { stroke: #b91c1c; }
+
+/* White variant for dark sections */
+.ornament-white { opacity: 0.08; }
+.ornament-white svg * { stroke: #ffffff; }
+
+/* ============================================
+   Decorative Border Lines
+   ============================================ */
+
+/* Top decorative border with diamond pattern */
+.border-ornament-top {
+  position: relative;
+}
+.border-ornament-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+  border-radius: 1px;
+}
+
+.border-ornament-top-gold::before {
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+}
+
+/* Bottom decorative border */
+.border-ornament-bottom {
+  position: relative;
+}
+.border-ornament-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+  border-radius: 1px;
+}
+
+/* ============================================
+   Decorative Background Patterns
+   ============================================ */
+
+/* Bamboo leaf pattern — for warm sections */
+.bg-bamboo {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 Q35 15 30 25 Q25 15 30 5Z' fill='none' stroke='%23b91c1c' stroke-width='0.5' opacity='0.06'/%3E%3C/svg%3E");
+}
+
+/* Sichuan cloud pattern — decorative */
+.bg-sichuan-cloud {
+  background-image: url("data:image/svg+xml,%3Csvg width='80' height='40' viewBox='0 0 80 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20 Q30 10 40 20 Q50 10 60 20' fill='none' stroke='%23b91c1c' stroke-width='0.5' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: center top;
+}
+
+/* ============================================
+   Floating Decorative Elements
+   ============================================ */
+
+.floating-decor {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  font-size: 1.5rem;
+  opacity: 0.08;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-hairline);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-strong);
+}
