@@ -47,3 +47,7 @@ next-env.d.ts
 # python scripts cache
 __pycache__/
 *.pyc
+
+# product images (hosted on Aliyun OSS)
+/public/images/products/
+/public/images/story/
