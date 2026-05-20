@@ -157,9 +157,9 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <button className="btn-primary w-full text-base">
+                <Link href="/checkout" className="btn-primary w-full text-base text-center block">
                   去结算
-                </button>
+                </Link>
 
                 <Link
                   href="/products"

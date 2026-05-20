@@ -406,10 +406,11 @@ def generate_products_ts(products: list[dict], categories: list[dict]) -> str:
 def main():
     import sys
     import io
+    import re
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
     print("=" * 60)
-    print("只下载 sm_1.jpg 商品介绍长图 + 重新生成 products.ts")
+    print("只下载 sm_1.jpg 商品介绍长图 + 更新已有 products.ts 的 descriptionImage")
     print("=" * 60)
 
     # 1. 读取原始 JSON 数据
@@ -419,10 +420,9 @@ def main():
         print("错误：没有读取到任何数据文件")
         return
 
-    # 2. 提取所有商品
-    print("\n[2/4] 提取商品列表...")
-    all_products: list[dict] = []
-    all_categories: list[dict] = []
+    # 2. 提取所有商品并下载 sm_1.jpg
+    print("\n[2/4] 下载 sm_1.jpg 图片...")
+    product_images: dict[str, str] = {}  # product_id -> descriptionImage path
     seen_product_ids: set[str] = set()
 
     for entry in all_data:
@@ -431,20 +431,8 @@ def main():
         try:
             product_list = data.get("data", {}).get("productList", {})
             items = product_list.get("datas", [])
-            category_list = data.get("data", {}).get("categoryList", [])
         except Exception:
             continue
-
-        for cat in category_list:
-            cat_id = str(cat.get("categoryCode") or "")
-            cat_name = cat.get("categoryName") or ""
-            if cat_id and cat_name:
-                all_categories.append({
-                    "id": cat_id,
-                    "name": cat_name,
-                    "icon": cat.get("iconUrl") or "",
-                    "description": cat.get("description") or "",
-                })
 
         for item in items:
             product_id = str(item.get("productId") or item.get("id") or "")
@@ -453,52 +441,71 @@ def main():
             seen_product_ids.add(product_id)
 
             parsed = parse_product(item, category_code)
-            if parsed:
-                all_products.append(parsed)
+            if parsed and parsed.get("descriptionImage"):
+                product_images[parsed["id"]] = parsed["descriptionImage"]
 
-    print(f"  共 {len(all_products)} 个商品")
+    print(f"  共处理 {len(seen_product_ids)} 个商品")
+    print(f"  有 sm_1.jpg 介绍图的商品: {len(product_images)}")
 
-    # 3. 生成 products.ts
-    print("\n[3/4] 生成 products.ts...")
-    # 合并分类（去重）
-    seen_cats: dict[str, dict] = {}
-    for cat in all_categories:
-        cid = cat["id"]
-        if cid not in seen_cats:
-            seen_cats[cid] = cat
-
-    # 确保5个父分类都存在（JSON中可能缺少父分类数据）
-    parent_fallback = {
-        "wine": ("酒类", "🍶", "精选四川名酒，浓香酱香各具风味"),
-        "tea": ("茗茶", "🍵", "四川高山好茶，清香悠长回味甘甜"),
-        "snack": ("特色小吃", "🥟", "地道四川小吃，麻辣鲜香回味无穷"),
-        "seasoning": ("调味品", "🌶️", "正宗川味调料，麻辣鲜香一应俱全"),
-        "other": ("其他", "📦", "更多四川特产，等你来发现"),
-    }
-    for pid, (pname, picon, pdesc) in parent_fallback.items():
-        if pid not in seen_cats:
-            seen_cats[pid] = {
-                "id": pid,
-                "name": pname,
-                "icon": picon,
-                "description": pdesc,
-            }
-
-    merged_categories = list(seen_cats.values())
-    print(f"  分类数: {len(merged_categories)}")
-
-    ts_content = generate_products_ts(all_products, merged_categories)
-
+    # 3. 更新已有 products.ts 中的 descriptionImage 字段
+    print("\n[3/4] 更新 products.ts 中的 descriptionImage...")
     output_path = BASE_DIR / "src" / "data" / "products.ts"
+    if not output_path.exists():
+        print(f"错误：{output_path} 不存在，请先运行 parse_local_data.py")
+        return
+
+    with open(output_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    # 对每个有 descriptionImage 的商品，在 products.ts 中找到对应行并更新
+    update_count = 0
+    for pid, img_path in product_images.items():
+        # 匹配 product 块中的 id 行，然后在其后查找或添加 descriptionImage 行
+        # 模式：匹配 "    id: \"{pid}\"," 然后查找后续的 descriptionImage 行
+        id_pattern = f'    id: "{pid}",'
+        if id_pattern not in content:
+            continue
+
+        # 找到 id 行的位置
+        id_pos = content.find(id_pattern)
+        # 从这个位置开始，找到当前 product 块的结束（下一个 "}," 或 "}" 或 "];"）
+        block_end = content.find("  },", id_pos)
+        if block_end == -1:
+            block_end = content.find("\n];", id_pos)
+        if block_end == -1:
+            block_end = id_pos + 200  # 安全回退
+
+        block = content[id_pos:block_end]
+
+        # 检查是否已有 descriptionImage 行
+        desc_pattern = re.compile(r'    descriptionImage: "[^"]*",?')
+        existing_desc = desc_pattern.search(block)
+
+        if existing_desc:
+            # 更新已有的 descriptionImage 行
+            old_line = existing_desc.group(0)
+            new_line = f'    descriptionImage: "{img_path}",'
+            # 只替换当前 block 中的这一行
+            line_pos = content.find(old_line, id_pos)
+            if line_pos != -1 and line_pos < block_end:
+                content = content[:line_pos] + new_line + content[line_pos + len(old_line):]
+                update_count += 1
+        else:
+            # 在 id 行之后插入 descriptionImage 行
+            # 找到 id 行末尾的换行符
+            id_line_end = content.find('\n', id_pos)
+            if id_line_end != -1:
+                insert_pos = id_line_end + 1
+                indent = "    "
+                content = content[:insert_pos] + f'{indent}descriptionImage: "{img_path}",\n' + content[insert_pos:]
+                update_count += 1
+
     with open(output_path, 'w', encoding='utf-8') as f:
-        f.write(ts_content)
-    print(f"  已写入: {output_path}")
+        f.write(content)
+    print(f"  更新了 {update_count} 个商品的 descriptionImage 字段")
 
     # 4. 统计
     print("\n[4/4] 统计...")
-    sm_count = sum(1 for p in all_products if p.get("descriptionImage"))
-    print(f"  有 sm_1.jpg 介绍图的商品: {sm_count} / {len(all_products)}")
-
     sm_files = list(IMAGES_DIR.glob("*_sm.jpg"))
     print(f"  已下载 sm_1.jpg 文件数: {len(sm_files)}")
 

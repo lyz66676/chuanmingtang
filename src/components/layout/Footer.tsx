@@ -69,11 +69,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-[var(--color-muted)]">
               <li className="flex items-center gap-2">
                 <span>📞</span>
-                <span>400-888-8888</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <span>📧</span>
-                <span>contact@chuanmingtang.com</span>
+                <span>18511865525</span>
               </li>
               <li className="flex items-center gap-2">
                 <span>📍</span>

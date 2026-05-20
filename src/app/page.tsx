@@ -60,19 +60,13 @@ export default function HomePage() {
     .sort((a, b) => (b.sales || 0) - (a.sales || 0))
     .slice(0, 8);
 
-  // 品牌故事区域使用的高质量商品图片（替换 emoji）
-  const storyImages = useMemo(() => {
-    const cooking = products.find((p) => p.subcategory === "cooking_seasoning" && p.image);
-    const seasoning = products.find((p) => p.parentCategory === "seasoning" && p.image);
-    const snack = products.find((p) => p.parentCategory === "snack" && p.image);
-    const tea = products.find((p) => p.parentCategory === "tea" && p.image);
-    return {
-      img1: cooking?.image || seasoning?.image || "",
-      img2: seasoning?.image || "",
-      img3: snack?.image || "",
-      img4: tea?.image || "",
-    };
-  }, []);
+  // 品牌故事区域使用本地图片
+  const storyImages = {
+    img1: "/images/story/11.png",
+    img2: "/images/story/12.png",
+    img3: "/images/story/13.png",
+    img4: "/images/story/14.png",
+  };
 
   return (
     <div>
@@ -547,10 +541,6 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-              <div className="absolute -bottom-3 -right-3 bg-white rounded-2xl shadow-lg px-5 py-3 border border-[var(--color-hairline)]">
-                <div className="text-sm font-semibold text-[var(--color-ink)]">30+ 年</div>
-                <div className="text-xs text-[var(--color-muted)]">传统工艺传承</div>
-              </div>
             </div>
 
             <div>
@@ -752,8 +742,8 @@ export default function HomePage() {
             {[
               { icon: "🚚", title: "全国包邮", desc: "满99元全国包邮，快速送达" },
               { icon: "✅", title: "品质保证", desc: "精选四川地道特产，严格品控" },
-              { icon: "🔄", title: "无忧退换", desc: "7天无理由退换，购物无忧" },
-              { icon: "💬", title: "在线客服", desc: "专业客服团队，随时为您服务" },
+              { icon: "🛡️", title: "质保售后", desc: "质量有问题随时退换" },
+              { icon: "🏪", title: "十五年老店", desc: "专业客服团队，随时为您服务" },
             ].map((feature, index) => (
               <div
                 key={feature.title}

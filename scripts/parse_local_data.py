@@ -700,11 +700,12 @@ def generate_products_ts(products: list[dict[str, Any]], categories: list[dict[s
 
     # 辅助函数 - 推荐商品（取销量最高的前16个，或带badge的商品）
     lines.append('// 推荐商品：优先取带badge的商品，不足则按销量排序补充')
+    lines.append('// 排除酒类和茶叶，展示亲民知名的零食和调味品')
     lines.append('export const featuredProducts: Product[] = (() => {')
-    lines.append('  const badgeProducts = products.filter((p) => p.badge === "热销" || p.badge === "特惠");')
+    lines.append('  const badgeProducts = products.filter((p) => (p.badge === "热销" || p.badge === "特惠") && p.parentCategory !== "wine" && p.parentCategory !== "tea");')
     lines.append('  if (badgeProducts.length >= 8) return badgeProducts.slice(0, 16);')
     lines.append('  const seen = new Set(badgeProducts.map((p) => p.id));')
-    lines.append('  const sorted = [...products].filter((p) => !seen.has(p.id)).sort((a, b) => (b.sales || 0) - (a.sales || 0));')
+    lines.append('  const sorted = [...products].filter((p) => !seen.has(p.id) && p.parentCategory !== "wine" && p.parentCategory !== "tea").sort((a, b) => (b.sales || 0) - (a.sales || 0));')
     lines.append('  return [...badgeProducts, ...sorted].slice(0, 16);')
     lines.append('})();')
     lines.append('// 新品推荐：取前12个商品')

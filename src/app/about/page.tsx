@@ -112,6 +112,28 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Contact Section */}
+      <section className="section bg-white">
+        <div className="container-airbnb">
+          <div className="max-w-xl mx-auto text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-[var(--color-ink)] mb-8">
+              联系我们
+            </h2>
+            <div className="card p-8">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <svg className="w-6 h-6 text-[var(--color-primary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                <span className="text-xl font-semibold text-[var(--color-ink)]">18511865525</span>
+              </div>
+              <p className="text-sm text-[var(--color-muted)]">
+                周一至周日 9:00 - 21:00
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="section bg-gradient-to-br from-[#b91c1c] to-[#dc2626] text-white">
         <div className="container-airbnb text-center">
