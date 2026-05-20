@@ -1,12 +1,26 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { categories } from "@/data/products";
+import { useCart } from "@/context/CartContext";
 
 export default function Header() {
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const { totalCount } = useCart();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
+      setIsSearchOpen(false);
+      setSearchQuery("");
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-[var(--color-hairline-soft)]">
@@ -16,7 +30,7 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-2 shrink-0">
             <span className="text-2xl">🌶️</span>
             <span className="text-lg md:text-xl font-bold text-[var(--color-ink)] tracking-tight">
-              蜀味坊
+              川名堂上地华联店
             </span>
           </Link>
 
@@ -34,7 +48,7 @@ export default function Header() {
             >
               全部商品
             </Link>
-            {categories.slice(0, 4).map((cat) => (
+            {categories.map((cat) => (
               <Link
                 key={cat.id}
                 href={`/products?category=${cat.id}`}
@@ -67,6 +81,11 @@ export default function Header() {
               <svg className="w-5 h-5 text-[var(--color-ink)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
               </svg>
+              {totalCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-[var(--color-primary)] text-white text-[10px] font-bold leading-none px-1">
+                  {totalCount > 99 ? "99+" : totalCount}
+                </span>
+              )}
             </Link>
 
             {/* Mobile Menu Toggle */}
@@ -88,10 +107,12 @@ export default function Header() {
 
         {/* Search Bar */}
         {isSearchOpen && (
-          <div className="pb-4 animate-[fadeIn_0.2s_ease]">
+          <form onSubmit={handleSearch} className="pb-4 animate-[fadeIn_0.2s_ease]">
             <div className="relative">
               <input
                 type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="搜索四川特产..."
                 className="w-full h-12 pl-12 pr-4 text-base rounded-full border border-[var(--color-hairline)] bg-[var(--color-surface-soft)] focus:outline-none focus:border-[var(--color-border-strong)] focus:bg-white transition-colors"
                 autoFocus
@@ -105,7 +126,7 @@ export default function Header() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
-          </div>
+          </form>
         )}
 
         {/* Mobile Menu */}

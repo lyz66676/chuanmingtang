@@ -10,7 +10,7 @@ export default function Footer() {
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
               <span className="text-2xl">🌶️</span>
-              <span className="text-lg font-bold text-[var(--color-ink)]">蜀味坊</span>
+              <span className="text-lg font-bold text-[var(--color-ink)]">川名堂上地华联店</span>
             </Link>
             <p className="text-sm text-[var(--color-muted)] leading-relaxed">
               传承四川味道，精选地道特产。<br />
@@ -73,11 +73,11 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <span>📧</span>
-                <span>contact@shuweifang.com</span>
+                <span>contact@chuanmingtang.com</span>
               </li>
               <li className="flex items-center gap-2">
                 <span>📍</span>
-                <span>四川省成都市锦江区</span>
+                <span>北京市海淀区上地华联购物中心</span>
               </li>
               <li className="flex items-center gap-2">
                 <span>🕐</span>
@@ -90,7 +90,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-[var(--color-hairline-soft)] flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-[var(--color-muted-soft)]">
-            © 2026 蜀味坊 版权所有 | 蜀ICP备2026XXXXXX号
+            © 2026 川名堂上地华联店 版权所有 | 蜀ICP备2026XXXXXX号
           </p>
           <div className="flex items-center gap-4">
             <span className="text-xs text-[var(--color-muted-soft)]">🌶️ 用心传承四川味道</span>

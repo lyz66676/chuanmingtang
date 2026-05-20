@@ -1,28 +1,55 @@
 import Link from "next/link";
+import React from "react";
 import type { Product } from "@/data/products";
 
 interface ProductCardProps {
   product: Product;
 }
 
+const categoryEmoji: Record<string, string> = {
+  baijiu: "🍶",
+  red_wine: "🍷",
+  other_wine: "🍸",
+  green_tea: "🍵",
+  black_tea: "🍵",
+  flower_tea: "🌺",
+  tibetan_tea: "🍵",
+  meat_snack: "🥩",
+  veggie_snack: "🥬",
+  candy: "🍬",
+  table_seasoning: "🧂",
+  cooking_seasoning: "🍳",
+  dried_goods: "🥜",
+  other_food: "🍱",
+  tea_set: "🫖",
+  other: "📦",
+};
+
 export default function ProductCard({ product }: ProductCardProps) {
+  const [imgError, setImgError] = React.useState(false);
+
   return (
     <Link href={`/product/${product.id}`} className="card group block">
       {/* Image Container */}
       <div className="relative aspect-[4/3] bg-[var(--color-surface-soft)] overflow-hidden">
-        {/* Placeholder with gradient */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center">
-            <span className="text-5xl mb-2 block">
-              {product.category === "hotpot" ? "🫕" :
-               product.category === "chili" ? "🌶️" :
-               product.category === "snack" ? "🥟" :
-               product.category === "seasoning" ? "🧂" :
-               product.category === "preserved" ? "🥩" : "🍵"}
-            </span>
-            <span className="text-xs text-[var(--color-muted)] block mt-1">{product.name}</span>
+        {!imgError ? (
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            loading="lazy"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center">
+              <span className="text-5xl mb-2 block">
+                {categoryEmoji[product.category] || "📦"}
+              </span>
+              <span className="text-xs text-[var(--color-muted)] block mt-1">{product.name}</span>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Badge */}
         {product.badge && (
@@ -41,20 +68,14 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.name}
         </h3>
 
-        {/* Rating */}
-        <div className="flex items-center gap-1 mb-2">
-          <span className="text-sm font-semibold text-[var(--color-star-rating)]">
-            ★ {product.rating}
-          </span>
-          <span className="text-xs text-[var(--color-muted-soft)]">
-            ({product.reviewCount})
-          </span>
-          {product.sales && (
-            <span className="text-xs text-[var(--color-muted-soft)] ml-auto">
+        {/* Sales Info */}
+        {product.sales && (
+          <div className="flex items-center gap-1 mb-2">
+            <span className="text-xs text-[var(--color-muted-soft)]">
               月销 {product.sales > 999 ? `${(product.sales / 1000).toFixed(1)}k` : product.sales}
             </span>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Price */}
         <div className="flex items-baseline gap-2">

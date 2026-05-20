@@ -11,7 +11,7 @@ export default function AboutPage() {
         </div>
         <div className="container-airbnb relative z-10 py-16 md:py-24 text-center">
           <h1 className="text-3xl md:text-5xl font-bold mb-4">
-            关于蜀味坊
+            关于川名堂上地华联店
           </h1>
           <p className="text-lg text-white/70 max-w-2xl mx-auto">
             传承四川味道，让世界爱上巴蜀美食
@@ -28,7 +28,7 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-4 text-[var(--color-body)] leading-relaxed">
               <p>
-                蜀味坊诞生于四川成都，一个被美食浸润的城市。我们深知，真正的四川味道不仅仅是麻辣，
+                川名堂诞生于四川成都，一个被美食浸润的城市。我们深知，真正的四川味道不仅仅是麻辣，
                 更是一种文化的传承，一种生活的态度。
               </p>
               <p>
@@ -106,7 +106,7 @@ export default function AboutPage() {
             <p className="text-[var(--color-body)] leading-relaxed text-center">
               四川，被誉为"天府之国"，不仅拥有壮丽的自然风光，更是中国美食的重要发源地。
               川菜以其独特的麻辣风味闻名于世，而四川的特产更是将这种风味发挥到了极致。
-              蜀味坊致力于将这些美味带到千家万户，让更多人感受四川美食的魅力。
+              川名堂致力于将这些美味带到千家万户，让更多人感受四川美食的魅力。
             </p>
           </div>
         </div>
@@ -119,7 +119,7 @@ export default function AboutPage() {
             开始您的四川美食之旅
           </h2>
           <p className="text-white/70 mb-8 max-w-lg mx-auto">
-            精选四川特产，从蜀味坊开始。让每一顿饭都充满巴蜀风情。
+            精选四川特产，从川名堂开始。让每一顿饭都充满巴蜀风情。
           </p>
           <Link
             href="/products"

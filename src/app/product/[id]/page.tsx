@@ -2,15 +2,49 @@
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { useState } from "react";
-import { getProductById, products } from "@/data/products";
+import { useState, useMemo } from "react";
+import { getProductById, products, getCategoryById } from "@/data/products";
 import ProductCard from "@/components/product/ProductCard";
+import { useCart } from "@/context/CartContext";
+
+const categoryEmoji: Record<string, string> = {
+  baijiu: "🍶",
+  red_wine: "🍷",
+  other_wine: "🍸",
+  green_tea: "🍵",
+  black_tea: "🍵",
+  flower_tea: "🌺",
+  tibetan_tea: "🍵",
+  meat_snack: "🥩",
+  veggie_snack: "🥬",
+  candy: "🍬",
+  table_seasoning: "🧂",
+  cooking_seasoning: "🍳",
+  dried_goods: "🥜",
+  other_food: "🍱",
+  tea_set: "🫖",
+  other: "📦",
+};
 
 export default function ProductDetailPage() {
   const params = useParams();
   const product = getProductById(params.id as string);
-  const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [imgError, setImgError] = useState(false);
+  const [addedToCart, setAddedToCart] = useState(false);
+  const { addItem } = useCart();
+
+  // 所有展示图：主图 + 多角度展示图（1.jpg ~ 4.jpg）
+  const displayImages = useMemo(() => {
+    const images: string[] = [product?.image || ""];
+    if (product?.images) {
+      product.images.forEach((img) => {
+        if (!images.includes(img)) images.push(img);
+      });
+    }
+    return images;
+  }, [product]);
 
   if (!product) {
     return (
@@ -37,12 +71,8 @@ export default function ProductDetailPage() {
     .filter((p) => p.category === product.category && p.id !== product.id)
     .slice(0, 4);
 
-  const categoryIcon =
-    product.category === "hotpot" ? "🫕" :
-    product.category === "chili" ? "🌶️" :
-    product.category === "snack" ? "🥟" :
-    product.category === "seasoning" ? "🧂" :
-    product.category === "preserved" ? "🥩" : "🍵";
+  const catInfo = getCategoryById(product.category);
+  const emoji = categoryEmoji[product.category] || "📦";
 
   return (
     <div className="section">
@@ -57,7 +87,7 @@ export default function ProductDetailPage() {
             href={`/products?category=${product.category}`}
             className="hover:text-[var(--color-ink)] transition-colors"
           >
-            {categoryIcon} {product.subcategory}
+            {emoji} {catInfo?.name || product.subcategory}
           </Link>
           <span>/</span>
           <span className="text-[var(--color-ink)] truncate max-w-[200px]">{product.name}</span>
@@ -65,30 +95,48 @@ export default function ProductDetailPage() {
 
         {/* Product Detail */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-          {/* Left: Images */}
+          {/* Left: Product Images with Thumbnail Strip */}
           <div>
-            <div className="aspect-square rounded-[14px] bg-[var(--color-surface-soft)] flex items-center justify-center mb-4">
-              <div className="text-center">
-                <span className="text-8xl block mb-4">{categoryIcon}</span>
-                <p className="text-sm text-[var(--color-muted)]">{product.name}</p>
+            <div className="aspect-square rounded-[14px] bg-[var(--color-surface-soft)] flex items-center justify-center overflow-hidden mb-4">
+              {!imgError ? (
+                <img
+                  src={displayImages[selectedImage] || product.image}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                  onError={() => setImgError(true)}
+                />
+              ) : (
+                <div className="text-center">
+                  <span className="text-8xl block mb-4">{emoji}</span>
+                  <p className="text-sm text-[var(--color-muted)]">{product.name}</p>
+                </div>
+              )}
+            </div>
+            {/* Thumbnail Strip */}
+            {displayImages.length > 1 && (
+              <div className="flex gap-2 overflow-x-auto pb-1">
+                {displayImages.map((img, i) => (
+                  <button
+                    key={i}
+                    onClick={() => { setSelectedImage(i); setImgError(false); }}
+                    className={`w-16 h-16 shrink-0 rounded-lg overflow-hidden border-2 transition-all ${
+                      i === selectedImage
+                        ? "border-[var(--color-accent)] ring-1 ring-[var(--color-accent)]"
+                        : "border-[var(--color-hairline-soft)] hover:border-[var(--color-muted)]"
+                    }`}
+                  >
+                    <img
+                      src={img}
+                      alt={`${product.name} ${i + 1}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
+                  </button>
+                ))}
               </div>
-            </div>
-            {/* Thumbnail strip */}
-            <div className="flex gap-3">
-              {[0, 1, 2, 3].map((i) => (
-                <button
-                  key={i}
-                  onClick={() => setSelectedImage(i)}
-                  className={`w-20 h-20 rounded-[14px] bg-[var(--color-surface-soft)] flex items-center justify-center text-2xl border-2 transition-colors ${
-                    selectedImage === i
-                      ? "border-[var(--color-primary)]"
-                      : "border-transparent hover:border-[var(--color-hairline)]"
-                  }`}
-                >
-                  {categoryIcon}
-                </button>
-              ))}
-            </div>
+            )}
           </div>
 
           {/* Right: Info */}
@@ -104,23 +152,15 @@ export default function ProductDetailPage() {
             <h1 className="text-2xl md:text-3xl font-bold text-[var(--color-ink)] mb-3">
               {product.name}
             </h1>
+{/* Sales Info */}
+{product.sales && (
+  <div className="flex items-center gap-3 mb-4">
+    <span className="text-sm text-[var(--color-muted-soft)]">
+      月销 {product.sales > 999 ? `${(product.sales / 1000).toFixed(1)}k` : product.sales}
+    </span>
+  </div>
+)}
 
-            {/* Rating */}
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex items-center gap-1">
-                <span className="text-lg font-semibold text-[var(--color-star-rating)]">
-                  ★ {product.rating}
-                </span>
-              </div>
-              <span className="text-sm text-[var(--color-muted-soft)]">
-                {product.reviewCount} 条评价
-              </span>
-              {product.sales && (
-                <span className="text-sm text-[var(--color-muted-soft)]">
-                  月销 {product.sales > 999 ? `${(product.sales / 1000).toFixed(1)}k` : product.sales}
-                </span>
-              )}
-            </div>
 
             {/* Price */}
             <div className="flex items-baseline gap-3 mb-6">
@@ -183,15 +223,46 @@ export default function ProductDetailPage() {
 
             {/* Actions */}
             <div className="flex items-center gap-3">
-              <button className="btn-primary flex-1 text-base">
-                加入购物车
+              <button
+                onClick={() => {
+                  addItem(product, quantity);
+                  setAddedToCart(true);
+                  setTimeout(() => setAddedToCart(false), 2000);
+                }}
+                className={`btn-primary flex-1 text-base transition-all ${
+                  addedToCart ? "scale-105" : ""
+                }`}
+              >
+                {addedToCart ? "✓ 已加入购物车" : "加入购物车"}
               </button>
-              <button className="btn-secondary flex-1 text-base">
+              <Link
+                href="/cart"
+                className="btn-secondary flex-1 text-base inline-flex items-center justify-center"
+              >
                 立即购买
-              </button>
+              </Link>
             </div>
           </div>
         </div>
+
+        {/* Product Description Image (sm_1.jpg 商品介绍长图) */}
+        {product.descriptionImage && (
+          <section className="mt-16 pt-12 border-t border-[var(--color-hairline-soft)]">
+            <h2 className="text-xl font-bold text-[var(--color-ink)] mb-6">
+              商品介绍
+            </h2>
+            <div className="rounded-[14px] bg-[var(--color-surface-soft)] overflow-hidden">
+              <img
+                src={product.descriptionImage}
+                alt={`${product.name} 商品介绍`}
+                className="w-full h-auto object-contain"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
+            </div>
+          </section>
+        )}
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
