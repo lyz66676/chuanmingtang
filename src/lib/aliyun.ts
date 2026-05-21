@@ -43,10 +43,11 @@ function computeSignature(
  * 使用 号码认证服务（PNVS）
  *
  * 所需环境变量:
- *   ALIYUN_ACCESS_KEY_ID      - 阿里云 AccessKey ID
- *   ALIYUN_ACCESS_KEY_SECRET  - 阿里云 AccessKey Secret
- *   ALIYUN_SMS_SIGN_NAME      - 短信签名（在阿里云短信服务中申请）
- *   ALIYUN_SMS_TEMPLATE_CODE  - 短信模板CODE（在阿里云短信服务中申请）
+ *   ALIYUN_ACCESS_KEY_ID        - 阿里云 AccessKey ID
+ *   ALIYUN_ACCESS_KEY_SECRET    - 阿里云 AccessKey Secret
+ *   ALIYUN_SMS_SIGN_NAME        - 短信签名（在阿里云短信服务中申请）
+ *   ALIYUN_SMS_TEMPLATE_CODE    - 短信模板CODE（在阿里云短信服务中申请）
+ *   ALIYUN_SMS_TEMPLATE_PARAM   - 短信模板变量 JSON 字符串，如 {"code":"123456"}
  */
 export async function sendSmsVerifyCode(
   phoneNumber: string,
@@ -54,7 +55,8 @@ export async function sendSmsVerifyCode(
   accessKeySecret: string,
   verifyCode?: string,
   signName?: string,
-  templateCode?: string
+  templateCode?: string,
+  templateParam?: string
 ): Promise<{ success: boolean; bizId?: string; message?: string }> {
   const params: AliyunParams = {
     Action: "SendSmsVerifyCode",
@@ -82,6 +84,11 @@ export async function sendSmsVerifyCode(
   // 如果传入了短信模板CODE，则使用它
   if (templateCode) {
     params.TemplateCode = templateCode;
+  }
+
+  // 如果传入了短信模板变量（JSON 字符串），则使用它
+  if (templateParam) {
+    params.TemplateParam = templateParam;
   }
 
   // 如果传入了自定义验证码，则使用它

@@ -30,6 +30,8 @@ export async function POST(request: NextRequest) {
     // 读取阿里云短信配置（在阿里云短信服务中申请）
     const signName = process.env.ALIYUN_SMS_SIGN_NAME;
     const templateCode = process.env.ALIYUN_SMS_TEMPLATE_CODE;
+    // 模板变量 JSON 字符串，如 {"code":"123456"}，可从环境变量读取或自动生成
+    const templateParam = process.env.ALIYUN_SMS_TEMPLATE_PARAM || JSON.stringify({ code });
 
     // 调用阿里云号码认证服务 SendSmsVerifyCode API
     const result = await sendSmsVerifyCode(
@@ -38,7 +40,8 @@ export async function POST(request: NextRequest) {
       accessKeySecret,
       code,
       signName,
-      templateCode
+      templateCode,
+      templateParam
     );
 
     if (!result.success) {
