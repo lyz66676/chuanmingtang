@@ -1,5 +1,6 @@
 import Database from "better-sqlite3";
 import path from "path";
+import crypto from "crypto";
 
 const DB_PATH = path.join(process.cwd(), "data", "orders.db");
 
@@ -101,6 +102,7 @@ function initTables(db: Database.Database) {
       id            TEXT PRIMARY KEY,
       phone         TEXT UNIQUE NOT NULL,
       name          TEXT DEFAULT '',
+      password      TEXT DEFAULT '',
       created_at    DATETIME DEFAULT (datetime('now', 'localtime')),
       updated_at    DATETIME DEFAULT (datetime('now', 'localtime'))
     );
@@ -136,9 +138,14 @@ function initTables(db: Database.Database) {
     );
   `);
 
-  // 兼容旧表：如果 orders 表没有 user_id 列则添加
+  // 兼容旧表
   try {
     db.exec(`ALTER TABLE orders ADD COLUMN user_id TEXT DEFAULT ''`);
+  } catch {
+    // 列已存在，忽略
+  }
+  try {
+    db.exec(`ALTER TABLE users ADD COLUMN password TEXT DEFAULT ''`);
   } catch {
     // 列已存在，忽略
   }
@@ -449,4 +456,35 @@ export function verifySmsCode(phone: string, code: string): boolean {
 export function cleanExpiredSmsCodes(): void {
   const db = getDb();
   db.prepare("DELETE FROM sms_codes WHERE expires_at <= datetime('now', 'localtime')").run();
+}
+
+/* ── Password ── */
+
+/** 设置密码（首次注册时设置，或忘记密码后重置） */
+export function setPassword(phone: string, password: string): boolean {
+  const db = getDb();
+  const hashed = crypto.createHash("sha256").update(password).digest("hex");
+  const result = db
+    .prepare("UPDATE users SET password = ?, updated_at = datetime('now', 'localtime') WHERE phone = ?")
+    .run(hashed, phone);
+  return result.changes > 0;
+}
+
+/** 验证密码 */
+export function verifyPassword(phone: string, password: string): boolean {
+  const db = getDb();
+  const hashed = crypto.createHash("sha256").update(password).digest("hex");
+  const row = db
+    .prepare("SELECT id FROM users WHERE phone = ? AND password = ?")
+    .get(phone, hashed) as { id: string } | undefined;
+  return !!row;
+}
+
+/** 检查用户是否已设置密码 */
+export function hasPassword(phone: string): boolean {
+  const db = getDb();
+  const row = db
+    .prepare("SELECT password FROM users WHERE phone = ?")
+    .get(phone) as { password: string } | undefined;
+  return !!row && row.password !== "";
 }

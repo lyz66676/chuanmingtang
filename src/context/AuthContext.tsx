@@ -11,7 +11,10 @@ interface User {
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (phone: string, code: string) => Promise<boolean>;
+  hasPassword: boolean;
+  login: (phone: string, code: string) => Promise<{ success: boolean; hasPassword?: boolean }>;
+  loginWithPassword: (phone: string, password: string) => Promise<boolean>;
+  setUserPassword: (phone: string, code: string, password: string) => Promise<boolean>;
   logout: () => void;
   refreshUser: () => Promise<void>;
 }
@@ -24,6 +27,7 @@ const REFRESH_TOKEN_KEY = "cmt_refresh_token";
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [hasPassword, setHasPassword] = useState(false);
 
   // 初始化：尝试用 refresh_token 自动登录
   useEffect(() => {
@@ -70,7 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     initAuth();
   }, []);
 
-  const login = useCallback(async (phone: string, code: string): Promise<boolean> => {
+  const login = useCallback(async (phone: string, code: string): Promise<{ success: boolean; hasPassword?: boolean }> => {
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
@@ -83,6 +87,47 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem(TOKEN_KEY, data.token);
         localStorage.setItem(REFRESH_TOKEN_KEY, data.refresh_token);
         setUser(data.user);
+        setHasPassword(data.has_password || false);
+        return { success: true, hasPassword: data.has_password || false };
+      }
+      return { success: false };
+    } catch {
+      return { success: false };
+    }
+  }, []);
+
+  const loginWithPassword = useCallback(async (phone: string, password: string): Promise<boolean> => {
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, password }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        localStorage.setItem(TOKEN_KEY, data.token);
+        localStorage.setItem(REFRESH_TOKEN_KEY, data.refresh_token);
+        setUser(data.user);
+        setHasPassword(true);
+        return true;
+      }
+      return false;
+    } catch {
+      return false;
+    }
+  }, []);
+
+  const setUserPassword = useCallback(async (phone: string, code: string, password: string): Promise<boolean> => {
+    try {
+      const res = await fetch("/api/auth/set-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, code, password }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setHasPassword(true);
         return true;
       }
       return false;
@@ -95,6 +140,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
     setUser(null);
+    setHasPassword(false);
   }, []);
 
   const refreshUser = useCallback(async () => {
@@ -115,7 +161,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, refreshUser }}>
+    <AuthContext.Provider value={{ user, loading, hasPassword, login, loginWithPassword, setUserPassword, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );
