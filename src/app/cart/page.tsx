@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 
 const categoryEmoji: Record<string, string> = {
   baijiu: "🍶",
@@ -25,6 +26,7 @@ const categoryEmoji: Record<string, string> = {
 
 export default function CartPage() {
   const { items: cartItems, removeItem, updateQuantity, totalCount, subtotal } = useCart();
+  const { user } = useAuth();
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
 
   return (
@@ -157,9 +159,15 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <Link href="/checkout" className="btn-primary w-full text-base text-center block">
-                  去结算
-                </Link>
+                {user ? (
+                  <Link href="/checkout" className="btn-primary w-full text-base text-center block">
+                    去结算
+                  </Link>
+                ) : (
+                  <Link href="/login?redirect=/cart" className="btn-primary w-full text-base text-center block">
+                    登录后结算
+                  </Link>
+                )}
 
                 <Link
                   href="/products"

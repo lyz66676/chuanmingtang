@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
+import { useAuth, getToken } from "@/context/AuthContext";
 
 interface Order {
   id: string;
@@ -25,10 +26,37 @@ const statusMap: Record<string, { label: string; color: string }> = {
 function OrdersContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
   const [phone, setPhone] = useState(searchParams.get("phone") || "");
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
+
+  // 已登录用户自动加载订单
+  useEffect(() => {
+    if (authLoading) return;
+    if (!user) return;
+
+    const fetchUserOrders = async () => {
+      setLoading(true);
+      setSearched(true);
+      try {
+        const token = getToken();
+        const res = await fetch(`/api/orders/user`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        if (data.success) {
+          setOrders(data.orders);
+        }
+      } catch {
+        // ignore
+      }
+      setLoading(false);
+    };
+
+    fetchUserOrders();
+  }, [user, authLoading]);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,35 +83,41 @@ function OrdersContent() {
           📋 我的订单
         </h1>
 
-        {/* 搜索 */}
-        <form onSubmit={handleSearch} className="mb-8">
-          <div className="flex gap-3">
-            <input
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="输入手机号查询订单"
-              maxLength={11}
-              className="flex-1 px-4 py-3 rounded-xl border border-[var(--color-hairline)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent text-base"
-            />
-            <button
-              type="submit"
-              disabled={loading || !/^1\d{10}$/.test(phone)}
-              className="btn-primary px-6 disabled:opacity-50"
-            >
-              {loading ? "查询中..." : "查询"}
-            </button>
-          </div>
-        </form>
+        {/* 搜索（未登录时显示） */}
+        {!user && (
+          <form onSubmit={handleSearch} className="mb-8">
+            <div className="flex gap-3">
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="输入手机号查询订单"
+                maxLength={11}
+                className="flex-1 px-4 py-3 rounded-xl border border-[var(--color-hairline)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent text-base"
+              />
+              <button
+                type="submit"
+                disabled={loading || !/^1\d{10}$/.test(phone)}
+                className="btn-primary px-6 disabled:opacity-50"
+              >
+                {loading ? "查询中..." : "查询"}
+              </button>
+            </div>
+          </form>
+        )}
 
         {/* 订单列表 */}
         {searched && (
           <>
-            {orders.length === 0 ? (
+            {loading ? (
+              <div className="text-center py-16">
+                <p className="text-[var(--color-muted)]">加载中...</p>
+              </div>
+            ) : orders.length === 0 ? (
               <div className="text-center py-16">
                 <span className="text-5xl block mb-4">📭</span>
                 <h3 className="text-lg font-semibold text-[var(--color-ink)] mb-2">暂无订单</h3>
-                <p className="text-[var(--color-muted)] mb-6">该手机号暂无订单记录</p>
+                <p className="text-[var(--color-muted)] mb-6">暂无订单记录</p>
                 <Link href="/products" className="btn-primary inline-flex">去逛逛</Link>
               </div>
             ) : (
@@ -123,8 +157,8 @@ function OrdersContent() {
           </>
         )}
 
-        {/* 未搜索提示 */}
-        {!searched && (
+        {/* 未搜索提示（仅未登录时显示） */}
+        {!searched && !user && (
           <div className="text-center py-16">
             <span className="text-5xl block mb-4">🔍</span>
             <p className="text-[var(--color-muted)]">输入下单时填写的手机号查询订单</p>

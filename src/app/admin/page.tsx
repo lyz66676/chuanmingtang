@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 
 interface OrderItem {
@@ -54,6 +54,36 @@ const statusColors: Record<string, string> = {
   cancelled: "text-gray-500 bg-gray-50 border-gray-200",
 };
 
+// 新订单提示音（使用 Web Audio API 生成提示音，无需外部文件）
+function playNewOrderSound() {
+  try {
+    const ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    oscillator.frequency.value = 880;
+    oscillator.type = "sine";
+    gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + 0.3);
+
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.frequency.value = 1100;
+    osc2.type = "sine";
+    gain2.gain.setValueAtTime(0.3, ctx.currentTime + 0.15);
+    gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.45);
+    osc2.start(ctx.currentTime + 0.15);
+    osc2.stop(ctx.currentTime + 0.45);
+  } catch {
+    // 音频不可用时静默失败
+  }
+}
+
 export default function AdminPage() {
   const [token, setToken] = useState("");
   const [password, setPassword] = useState("");
@@ -64,6 +94,11 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [shipDialog, setShipDialog] = useState<{ id: string; name: string } | null>(null);
   const [trackingNo, setTrackingNo] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
+  const [autoRefresh, setAutoRefresh] = useState(true);
+  const prevOrdersRef = useRef<Order[]>([]);
+  const autoRefreshRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const fetchOrders = useCallback(async (statusFilter = "") => {
     setLoading(true);
@@ -76,6 +111,11 @@ export default function AdminPage() {
       });
       const data = await res.json();
       if (data.success) {
+        // 检测新订单（声音提醒）
+        if (prevOrdersRef.current.length > 0 && data.orders.length > prevOrdersRef.current.length) {
+          playNewOrderSound();
+        }
+        prevOrdersRef.current = data.orders;
         setOrders(data.orders);
         setStats(data.stats);
       }
@@ -97,6 +137,21 @@ export default function AdminPage() {
       fetchOrders(filter);
     }
   }, [token, filter, fetchOrders]);
+
+  // 自动刷新（每15秒）
+  useEffect(() => {
+    if (token && autoRefresh) {
+      autoRefreshRef.current = setInterval(() => {
+        fetchOrders(filter);
+      }, 15000);
+    }
+    return () => {
+      if (autoRefreshRef.current) {
+        clearInterval(autoRefreshRef.current);
+        autoRefreshRef.current = null;
+      }
+    };
+  }, [token, filter, autoRefresh, fetchOrders]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -122,6 +177,9 @@ export default function AdminPage() {
   const handleLogout = () => {
     setToken("");
     localStorage.removeItem("admin_token");
+    if (autoRefreshRef.current) {
+      clearInterval(autoRefreshRef.current);
+    }
   };
 
   const handleShip = async (id: string) => {
@@ -186,6 +244,36 @@ export default function AdminPage() {
     }
   };
 
+  const handleMarkPaid = async (id: string) => {
+    if (!confirm("确认将该订单标记为已支付？")) return;
+    try {
+      const res = await fetch(`/api/admin/orders/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status: "paid", pay_status: "paid" }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        fetchOrders(filter);
+      }
+    } catch {
+      // ignore
+    }
+  };
+
+  // 搜索过滤
+  const filteredOrders = searchQuery.trim()
+    ? orders.filter(
+        (o) =>
+          o.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          o.customer_name.includes(searchQuery) ||
+          o.phone.includes(searchQuery)
+      )
+    : orders;
+
   // 登录页
   if (!token) {
     return (
@@ -228,7 +316,21 @@ export default function AdminPage() {
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
-          <h1 className="text-lg font-bold text-gray-800">🔔 川名堂管理后台</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-lg font-bold text-gray-800">🔔 川名堂管理后台</h1>
+            {/* Auto-refresh toggle */}
+            <button
+              onClick={() => setAutoRefresh(!autoRefresh)}
+              className={`text-xs px-2 py-1 rounded-full font-medium transition-colors ${
+                autoRefresh
+                  ? "bg-green-100 text-green-700"
+                  : "bg-gray-100 text-gray-500"
+              }`}
+              title={autoRefresh ? "自动刷新已开启（15秒）" : "自动刷新已关闭"}
+            >
+              {autoRefresh ? "🔄 自动" : "⏸ 暂停"}
+            </button>
+          </div>
           <button
             onClick={handleLogout}
             className="text-sm text-gray-500 hover:text-gray-700"
@@ -259,6 +361,25 @@ export default function AdminPage() {
           </div>
         )}
 
+        {/* Search bar */}
+        <div className="relative">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="🔍 搜索订单号、姓名、手机号..."
+            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-red-500 text-sm"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+
         {/* Filter tabs */}
         <div className="flex gap-2 overflow-x-auto pb-2">
           {["", "paid", "shipped", "pending", "completed"].map((s) => (
@@ -284,110 +405,159 @@ export default function AdminPage() {
         {/* Order list */}
         {loading ? (
           <div className="text-center py-12 text-gray-500">加载中...</div>
-        ) : orders.length === 0 ? (
+        ) : filteredOrders.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
             <p className="text-4xl mb-3">📭</p>
-            <p>暂无订单</p>
+            <p>{searchQuery ? "未找到匹配的订单" : "暂无订单"}</p>
           </div>
         ) : (
           <div className="space-y-4">
-            {orders.map((order) => (
-              <div
-                key={order.id}
-                className="bg-white rounded-2xl border border-gray-200 p-5"
-              >
-                {/* Order header */}
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <p className="text-sm font-semibold text-gray-800">{order.id}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{order.created_at}</p>
-                  </div>
-                  <span
-                    className={`text-xs px-2.5 py-1 rounded-full border font-medium ${
-                      statusColors[order.status] || "text-gray-600 bg-gray-50 border-gray-200"
-                    }`}
-                  >
-                    {statusLabels[order.status] || order.status}
-                  </span>
-                </div>
-
-                {/* Customer info */}
-                <div className="text-sm text-gray-600 mb-3 space-y-1">
-                  <p>
-                    <span className="text-gray-400">👤</span> {order.customer_name} · {order.phone}
-                  </p>
-                  <p>
-                    <span className="text-gray-400">
-                      {order.delivery_type === "delivery" ? "🚚" : "🚶"}
-                    </span>{" "}
-                    {order.delivery_type === "delivery" ? order.address : "到店自提"}
-                  </p>
-                  {order.note && (
-                    <p>
-                      <span className="text-gray-400">📝</span> {order.note}
-                    </p>
-                  )}
-                </div>
-
-                {/* Items */}
-                <div className="border-t border-gray-100 pt-3 mb-3">
-                  {order.items.map((item, i) => (
-                    <div key={i} className="flex items-center justify-between text-sm py-1">
-                      <span className="text-gray-700 truncate max-w-[70%]">
-                        {item.name} × {item.quantity}
-                      </span>
-                      <span className="font-semibold text-gray-800">
-                        ¥{(item.price * item.quantity).toFixed(1)}
-                      </span>
+            {filteredOrders.map((order) => {
+              const isExpanded = expandedOrder === order.id;
+              return (
+                <div
+                  key={order.id}
+                  className={`bg-white rounded-2xl border border-gray-200 p-5 transition-all ${
+                    order.status === "paid" ? "ring-2 ring-red-200" : ""
+                  }`}
+                >
+                  {/* Order header */}
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setExpandedOrder(isExpanded ? null : order.id)}
+                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                      >
+                        <svg
+                          className={`w-4 h-4 transition-transform ${isExpanded ? "rotate-90" : ""}`}
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                      <div>
+                        <p className="text-sm font-semibold text-gray-800">{order.id}</p>
+                        <p className="text-xs text-gray-400 mt-0.5">{order.created_at}</p>
+                      </div>
                     </div>
-                  ))}
-                </div>
+                    <span
+                      className={`text-xs px-2.5 py-1 rounded-full border font-medium ${
+                        statusColors[order.status] || "text-gray-600 bg-gray-50 border-gray-200"
+                      }`}
+                    >
+                      {statusLabels[order.status] || order.status}
+                    </span>
+                  </div>
 
-                {/* Total */}
-                <div className="flex items-center justify-between border-t border-gray-100 pt-3 mb-4">
-                  <span className="text-sm text-gray-500">
-                    {order.tracking_no && `快递单号: ${order.tracking_no}`}
-                  </span>
-                  <span className="text-lg font-bold text-red-600">
-                    ¥{order.total.toFixed(1)}
-                  </span>
-                </div>
+                  {/* Customer info (always visible) */}
+                  <div className="text-sm text-gray-600 mb-3 space-y-1">
+                    <p>
+                      <span className="text-gray-400">👤</span> {order.customer_name} · {order.phone}
+                    </p>
+                    <p>
+                      <span className="text-gray-400">
+                        {order.delivery_type === "delivery" ? "🚚" : "🚶"}
+                      </span>{" "}
+                      {order.delivery_type === "delivery" ? order.address : "到店自提"}
+                    </p>
+                    {order.note && (
+                      <p>
+                        <span className="text-gray-400">📝</span> {order.note}
+                      </p>
+                    )}
+                  </div>
 
-                {/* Actions */}
-                <div className="flex gap-2">
-                  {order.status === "paid" && order.delivery_type === "delivery" && (
-                    <button
-                      onClick={() => setShipDialog({ id: order.id, name: order.customer_name })}
-                      className="flex-1 py-2.5 rounded-xl bg-red-600 text-white font-semibold text-sm hover:bg-red-700 transition-colors"
-                    >
-                      📦 发货
-                    </button>
+                  {/* Expandable details */}
+                  {isExpanded && (
+                    <div className="border-t border-gray-100 pt-3 mb-3 animate-[fadeIn_0.2s_ease]">
+                      {/* Items */}
+                      <div className="mb-3">
+                        <p className="text-xs text-gray-400 mb-2 font-medium">商品明细</p>
+                        {order.items.map((item, i) => (
+                          <div key={i} className="flex items-center justify-between text-sm py-1">
+                            <span className="text-gray-700 truncate max-w-[70%]">
+                              {item.name} × {item.quantity}
+                            </span>
+                            <span className="font-semibold text-gray-800">
+                              ¥{(item.price * item.quantity).toFixed(1)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                      {/* Pay status & tracking */}
+                      <div className="grid grid-cols-2 gap-3 text-xs text-gray-500">
+                        <div>
+                          <span className="text-gray-400">支付状态：</span>
+                          <span className={order.pay_status === "paid" ? "text-green-600" : "text-amber-600"}>
+                            {order.pay_status === "paid" ? "已支付" : "未支付"}
+                          </span>
+                        </div>
+                        {order.tracking_no && (
+                          <div>
+                            <span className="text-gray-400">快递单号：</span>
+                            <span>{order.tracking_no}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   )}
-                  {order.status === "paid" && order.delivery_type === "pickup" && (
-                    <button
-                      onClick={() => handleReady(order.id)}
-                      className="flex-1 py-2.5 rounded-xl bg-green-600 text-white font-semibold text-sm hover:bg-green-700 transition-colors"
+
+                  {/* Total */}
+                  <div className="flex items-center justify-between border-t border-gray-100 pt-3 mb-4">
+                    <span className="text-sm text-gray-500">
+                      {order.tracking_no && `快递单号: ${order.tracking_no}`}
+                    </span>
+                    <span className="text-lg font-bold text-red-600">
+                      ¥{order.total.toFixed(1)}
+                    </span>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-2">
+                    {order.status === "pending" && order.pay_status === "unpaid" && (
+                      <button
+                        onClick={() => handleMarkPaid(order.id)}
+                        className="flex-1 py-2.5 rounded-xl bg-amber-600 text-white font-semibold text-sm hover:bg-amber-700 transition-colors"
+                      >
+                        💰 标记已支付
+                      </button>
+                    )}
+                    {order.status === "paid" && order.delivery_type === "delivery" && (
+                      <button
+                        onClick={() => setShipDialog({ id: order.id, name: order.customer_name })}
+                        className="flex-1 py-2.5 rounded-xl bg-red-600 text-white font-semibold text-sm hover:bg-red-700 transition-colors"
+                      >
+                        📦 发货
+                      </button>
+                    )}
+                    {order.status === "paid" && order.delivery_type === "pickup" && (
+                      <button
+                        onClick={() => handleReady(order.id)}
+                        className="flex-1 py-2.5 rounded-xl bg-green-600 text-white font-semibold text-sm hover:bg-green-700 transition-colors"
+                      >
+                        ✅ 备货完成
+                      </button>
+                    )}
+                    {order.status === "ready" && (
+                      <button
+                        onClick={() => handleComplete(order.id)}
+                        className="flex-1 py-2.5 rounded-xl bg-green-600 text-white font-semibold text-sm hover:bg-green-700 transition-colors"
+                      >
+                        🎉 确认取货
+                      </button>
+                    )}
+                    <a
+                      href={`tel:${order.phone}`}
+                      className="py-2.5 px-4 rounded-xl border border-gray-200 text-gray-600 font-medium text-sm hover:bg-gray-50 transition-colors"
                     >
-                      ✅ 备货完成
-                    </button>
-                  )}
-                  {order.status === "ready" && (
-                    <button
-                      onClick={() => handleComplete(order.id)}
-                      className="flex-1 py-2.5 rounded-xl bg-green-600 text-white font-semibold text-sm hover:bg-green-700 transition-colors"
-                    >
-                      🎉 确认取货
-                    </button>
-                  )}
-                  <a
-                    href={`tel:${order.phone}`}
-                    className="py-2.5 px-4 rounded-xl border border-gray-200 text-gray-600 font-medium text-sm hover:bg-gray-50 transition-colors"
-                  >
-                    📞 联系
-                  </a>
+                      📞 联系
+                    </a>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

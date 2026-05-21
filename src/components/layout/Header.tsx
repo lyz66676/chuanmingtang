@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { categories } from "@/data/products";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Header() {
   const router = useRouter();
@@ -12,6 +13,7 @@ export default function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { totalCount } = useCart();
+  const { user } = useAuth();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,6 +63,26 @@ export default function Header() {
 
           {/* Right Actions */}
           <div className="flex items-center gap-2">
+            {/* User Account */}
+            {user ? (
+              <Link
+                href="/account"
+                className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-[var(--color-surface-soft)] transition-colors text-sm font-medium text-[var(--color-ink)]"
+              >
+                <span className="w-6 h-6 rounded-full bg-[var(--color-primary)] text-white flex items-center justify-center text-xs font-bold">
+                  {(user.name || user.phone)[0]}
+                </span>
+                <span className="max-w-[80px] truncate">{user.name || user.phone}</span>
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="hidden md:inline-flex px-4 py-1.5 rounded-full border border-[var(--color-primary)] text-[var(--color-primary)] text-sm font-medium hover:bg-red-50 transition-colors"
+              >
+                登录
+              </Link>
+            )}
+
             {/* Search Button */}
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
@@ -133,6 +155,38 @@ export default function Header() {
         {isMenuOpen && (
           <nav className="md:hidden pb-4 border-t border-[var(--color-hairline-soft)] pt-4 animate-[fadeIn_0.2s_ease]">
             <div className="flex flex-col gap-1">
+              {/* Mobile User Section */}
+              {user ? (
+                <Link
+                  href="/account"
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[var(--color-surface-soft)] transition-colors border-b border-[var(--color-hairline-soft)] mb-1 pb-3"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <span className="w-8 h-8 rounded-full bg-[var(--color-primary)] text-white flex items-center justify-center text-sm font-bold">
+                    {(user.name || user.phone)[0]}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-[var(--color-ink)] truncate">
+                      {user.name || "用户"}
+                    </p>
+                    <p className="text-xs text-[var(--color-muted)]">
+                      {user.phone.replace(/(\d{3})\d{4}(\d{4})/, "$1****$2")}
+                    </p>
+                  </div>
+                  <svg className="w-4 h-4 text-[var(--color-muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              ) : (
+                <Link
+                  href="/login"
+                  className="flex items-center gap-2 px-4 py-3 text-sm font-semibold rounded-xl hover:bg-[var(--color-surface-soft)] transition-colors border-b border-[var(--color-hairline-soft)] mb-1 pb-3"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <span className="w-8 h-8 rounded-full bg-[var(--color-primary)] text-white flex items-center justify-center text-sm">👤</span>
+                  <span>登录 / 注册</span>
+                </Link>
+              )}
               <Link
                 href="/"
                 className="px-4 py-3 text-sm font-semibold rounded-xl hover:bg-[var(--color-surface-soft)] transition-colors"

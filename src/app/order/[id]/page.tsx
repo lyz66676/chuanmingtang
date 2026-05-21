@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 interface OrderItem {
   id: string;
@@ -25,6 +25,7 @@ interface Order {
   note: string;
   tracking_no: string;
   pay_status: string;
+  pay_time: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -58,6 +59,12 @@ export default function OrderDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [confirming, setConfirming] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+
+  // 支付相关状态
+  const [paying, setPaying] = useState(false);
+  const [payError, setPayError] = useState("");
+  const [pollingCount, setPollingCount] = useState(0);
 
   useEffect(() => {
     fetch(`/api/orders/${id}`)
@@ -73,6 +80,48 @@ export default function OrderDetailPage() {
       .finally(() => setLoading(false));
   }, [id]);
 
+  // 轮询订单状态（支付成功后自动更新）
+  useEffect(() => {
+    if (!order || order.pay_status === "paid" || pollingCount > 60) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/orders/${id}`);
+        const data = await res.json();
+        if (data.success) {
+          setOrder(data.order);
+          setPollingCount((c) => c + 1);
+        }
+      } catch {
+        // ignore
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [order, id, pollingCount]);
+
+  const handlePay = useCallback(async () => {
+    setPaying(true);
+    setPayError("");
+    try {
+      const res = await fetch("/api/pay/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ order_id: id }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        // 直接跳转到支付页面
+        window.location.href = data.data.pay_url;
+      } else {
+        setPayError(data.error || "创建支付失败");
+      }
+    } catch {
+      setPayError("网络错误，请稍后重试");
+    }
+    setPaying(false);
+  }, [id]);
+
   const handleConfirm = async () => {
     setConfirming(true);
     try {
@@ -85,6 +134,25 @@ export default function OrderDetailPage() {
       // ignore
     }
     setConfirming(false);
+  };
+
+  const handleCancel = async () => {
+    if (!confirm("确定要取消这个订单吗？")) return;
+    setCancelling(true);
+    try {
+      const res = await fetch(`/api/orders/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "cancelled" }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setOrder(data.order);
+      }
+    } catch {
+      // ignore
+    }
+    setCancelling(false);
   };
 
   if (loading) {
@@ -117,10 +185,21 @@ export default function OrderDetailPage() {
     <div className="section">
       <div className="container-airbnb max-w-3xl mx-auto">
         {/* 成功提示 */}
-        <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center mb-8">
-          <span className="text-5xl block mb-3">🎉</span>
-          <h1 className="text-2xl font-bold text-green-800 mb-1">订单提交成功！</h1>
-          <p className="text-green-600">订单号：{order.id}</p>
+        <div className={`${order.pay_status === "paid" ? "bg-green-50 border-green-200" : "bg-amber-50 border-amber-200"} border rounded-2xl p-6 text-center mb-8`}>
+          <span className="text-5xl block mb-3">
+            {order.pay_status === "paid" ? "🎉" : "⏳"}
+          </span>
+          <h1 className={`text-2xl font-bold mb-1 ${order.pay_status === "paid" ? "text-green-800" : "text-amber-800"}`}>
+            {order.pay_status === "paid" ? "支付成功！" : "订单已提交"}
+          </h1>
+          <p className={`${order.pay_status === "paid" ? "text-green-600" : "text-amber-600"}`}>
+            订单号：{order.id}
+          </p>
+          {order.pay_status === "paid" && order.pay_time && (
+            <p className="text-xs mt-1 opacity-75">
+              支付时间：{order.pay_time}
+            </p>
+          )}
         </div>
 
         {/* 订单状态 */}
@@ -168,6 +247,31 @@ export default function OrderDetailPage() {
             })}
           </div>
         </div>
+
+        {/* 支付（待付款状态 - 微信收款码） */}
+        {order.pay_status === "unpaid" && order.status !== "cancelled" && (
+          <div className="card p-6 mb-6 text-center">
+            <h2 className="text-lg font-semibold text-[var(--color-ink)] mb-4">
+              💳 微信支付
+            </h2>
+            <p className="text-3xl font-bold text-[var(--color-primary)] mb-4">
+              ¥{order.total.toFixed(1)}
+            </p>
+            <div className="bg-white p-4 rounded-xl inline-block mb-4 shadow-sm">
+              <img
+                src="/wechat-pay.jpg"
+                alt="微信收款码"
+                className="w-48 h-48 object-contain mx-auto"
+              />
+            </div>
+            <p className="text-sm text-[var(--color-muted)] mb-3">
+              请使用微信扫描上方二维码完成付款
+            </p>
+            <p className="text-xs text-amber-600 bg-amber-50 rounded-lg px-3 py-2">
+              ⚠️ 付款后请等待管理员确认收款，订单状态将自动更新
+            </p>
+          </div>
+        )}
 
         {/* 配送信息 */}
         <div className="card p-6 mb-6">
@@ -229,6 +333,16 @@ export default function OrderDetailPage() {
 
         {/* 操作按钮 */}
         <div className="space-y-3">
+          {order.status === "pending" && order.pay_status === "unpaid" && (
+            <button
+              onClick={handleCancel}
+              disabled={cancelling}
+              className="w-full text-center py-3 rounded-xl border border-red-200 text-red-600 hover:bg-red-50 transition-colors"
+            >
+              {cancelling ? "取消中..." : "取消订单"}
+            </button>
+          )}
+
           {order.status === "shipped" && (
             <button
               onClick={handleConfirm}

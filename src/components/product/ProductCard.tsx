@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import React from "react";
 import type { Product } from "@/data/products";
+import { useCart } from "@/context/CartContext";
 
 interface ProductCardProps {
   product: Product;
@@ -27,6 +30,16 @@ const categoryEmoji: Record<string, string> = {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const [imgError, setImgError] = React.useState(false);
+  const [added, setAdded] = React.useState(false);
+  const { addItem } = useCart();
+
+  const handleQuickAdd = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addItem(product, 1);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1500);
+  };
 
   return (
     <Link href={`/product/${product.id}`} className="card group block">
@@ -57,6 +70,27 @@ export default function ProductCard({ product }: ProductCardProps) {
             {product.badge}
           </span>
         )}
+
+        {/* Quick Add Button (mobile friendly) */}
+        <button
+          onClick={handleQuickAdd}
+          className={`absolute bottom-2 right-2 w-9 h-9 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 ${
+            added
+              ? "bg-green-500 text-white scale-110"
+              : "bg-white text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white"
+          }`}
+          aria-label="快速加入购物车"
+        >
+          {added ? (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+            </svg>
+          ) : (
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+          )}
+        </button>
 
         {/* Hover overlay */}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />

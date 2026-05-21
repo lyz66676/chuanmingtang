@@ -4,7 +4,7 @@ import { createOrder } from "@/lib/db";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { customer_name, phone, address, delivery_type, items, total, note } = body;
+    const { customer_name, phone, address, delivery_type, items, total, note, user_id } = body;
 
     // 验证必填字段
     if (!customer_name || !phone || !delivery_type || !items || total === undefined) {
@@ -36,6 +36,7 @@ export async function POST(request: NextRequest) {
       items: JSON.stringify(items),
       total,
       note: note || "",
+      user_id: user_id || "",
     });
 
     return NextResponse.json({ success: true, order }, { status: 201 });

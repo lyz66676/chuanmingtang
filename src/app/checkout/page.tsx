@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
+import { useAuth, getToken } from "@/context/AuthContext";
 
 const categoryEmoji: Record<string, string> = {
   baijiu: "🍶", red_wine: "🍷", other_wine: "🍸",
@@ -13,9 +14,21 @@ const categoryEmoji: Record<string, string> = {
   dried_goods: "🥜", other_food: "🍱", tea_set: "🫖", other: "📦",
 };
 
+interface Address {
+  id: string;
+  name: string;
+  phone: string;
+  province: string;
+  city: string;
+  district: string;
+  detail: string;
+  is_default: number;
+}
+
 export default function CheckoutPage() {
   const router = useRouter();
   const { items: cartItems, subtotal, clearCart } = useCart();
+  const { user } = useAuth();
 
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
@@ -24,6 +37,41 @@ export default function CheckoutPage() {
   const [note, setNote] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+
+  // Address selector state
+  const [savedAddresses, setSavedAddresses] = useState<Address[]>([]);
+  const [showAddressPicker, setShowAddressPicker] = useState(false);
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
+
+  // Load saved addresses for logged-in users
+  useEffect(() => {
+    if (!user) return;
+    const token = getToken();
+    if (!token) return;
+    fetch("/api/addresses", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setSavedAddresses(data.addresses);
+          // Auto-select default address
+          const defaultAddr = data.addresses.find((a: Address) => a.is_default === 1);
+          if (defaultAddr) {
+            selectAddress(defaultAddr);
+          }
+        }
+      })
+      .catch(() => {});
+  }, [user]);
+
+  const selectAddress = (addr: Address) => {
+    setCustomerName(addr.name);
+    setPhone(addr.phone);
+    setAddress([addr.province, addr.city, addr.district, addr.detail].filter(Boolean).join(" "));
+    setSelectedAddressId(addr.id);
+    setShowAddressPicker(false);
+  };
 
   const shipping = subtotal >= 99 ? 0 : 15;
   const total = subtotal + (deliveryType === "delivery" ? shipping : 0);
@@ -38,9 +86,13 @@ export default function CheckoutPage() {
 
     setSubmitting(true);
     try {
+      const token = getToken();
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
       const res = await fetch("/api/orders", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({
           customer_name: customerName.trim(),
           phone: phone.trim(),
@@ -56,6 +108,7 @@ export default function CheckoutPage() {
           })),
           total,
           note: note.trim(),
+          user_id: user?.id || undefined,
         }),
       });
 
@@ -127,6 +180,81 @@ export default function CheckoutPage() {
           {/* 联系信息 */}
           <div className="card p-6 space-y-4">
             <h2 className="text-lg font-semibold text-[var(--color-ink)]">联系信息</h2>
+
+            {/* Saved Addresses (for logged-in users) */}
+            {user && savedAddresses.length > 0 && deliveryType === "delivery" && (
+              <div>
+                <label className="block text-sm font-medium text-[var(--color-ink)] mb-2">
+                  选择收货地址
+                </label>
+                <div className="space-y-2">
+                  {savedAddresses.slice(0, 3).map((addr) => (
+                    <button
+                      key={addr.id}
+                      type="button"
+                      onClick={() => selectAddress(addr)}
+                      className={`w-full text-left p-3 rounded-xl border-2 transition-all ${
+                        selectedAddressId === addr.id
+                          ? "border-[var(--color-primary)] bg-red-50"
+                          : "border-[var(--color-hairline)] hover:border-[var(--color-muted)]"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-sm text-[var(--color-ink)]">{addr.name}</span>
+                        <span className="text-xs text-[var(--color-muted)]">{addr.phone}</span>
+                        {addr.is_default === 1 && (
+                          <span className="text-xs px-1.5 py-0.5 rounded-full bg-[var(--color-primary)] text-white">
+                            默认
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-[var(--color-muted)] mt-0.5">
+                        {[addr.province, addr.city, addr.district, addr.detail].filter(Boolean).join(" ")}
+                      </p>
+                    </button>
+                  ))}
+                  {savedAddresses.length > 3 && (
+                    <button
+                      type="button"
+                      onClick={() => setShowAddressPicker(!showAddressPicker)}
+                      className="text-sm text-[var(--color-primary)] hover:underline"
+                    >
+                      {showAddressPicker ? "收起" : `查看全部 ${savedAddresses.length} 个地址`}
+                    </button>
+                  )}
+                  {showAddressPicker && (
+                    <div className="space-y-2 mt-2">
+                      {savedAddresses.slice(3).map((addr) => (
+                        <button
+                          key={addr.id}
+                          type="button"
+                          onClick={() => selectAddress(addr)}
+                          className={`w-full text-left p-3 rounded-xl border-2 transition-all ${
+                            selectedAddressId === addr.id
+                              ? "border-[var(--color-primary)] bg-red-50"
+                              : "border-[var(--color-hairline)] hover:border-[var(--color-muted)]"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium text-sm text-[var(--color-ink)]">{addr.name}</span>
+                            <span className="text-xs text-[var(--color-muted)]">{addr.phone}</span>
+                          </div>
+                          <p className="text-xs text-[var(--color-muted)] mt-0.5">
+                            {[addr.province, addr.city, addr.district, addr.detail].filter(Boolean).join(" ")}
+                          </p>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  <Link
+                    href="/account/addresses"
+                    className="inline-block text-sm text-[var(--color-primary)] hover:underline"
+                  >
+                    管理地址 →
+                  </Link>
+                </div>
+              </div>
+            )}
 
             <div>
               <label className="block text-sm font-medium text-[var(--color-ink)] mb-1">姓名 *</label>

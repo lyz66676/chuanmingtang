@@ -1,11 +1,12 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useState, useMemo } from "react";
 import { getProductById, products, getCategoryById } from "@/data/products";
 import ProductCard from "@/components/product/ProductCard";
 import { useCart } from "@/context/CartContext";
+import { useAuth, getToken } from "@/context/AuthContext";
 
 const categoryEmoji: Record<string, string> = {
   baijiu: "🍶",
@@ -28,12 +29,15 @@ const categoryEmoji: Record<string, string> = {
 
 export default function ProductDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const product = getProductById(params.id as string);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const [imgError, setImgError] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
+  const [buying, setBuying] = useState(false);
   const { addItem } = useCart();
+  const { user } = useAuth();
 
   // 所有展示图：主图 + 多角度展示图（1.jpg ~ 4.jpg）
   const displayImages = useMemo(() => {
@@ -45,6 +49,58 @@ export default function ProductDetailPage() {
     }
     return images;
   }, [product]);
+
+  // "立即购买" - 直接创建订单，跳过购物车（参考京东/淘宝做法）
+  const handleBuyNow = async () => {
+    if (!product) return;
+
+    // 未登录则跳转到登录页
+    if (!user) {
+      router.push(`/login?redirect=/product/${product.id}`);
+      return;
+    }
+
+    setBuying(true);
+    try {
+      const token = getToken();
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          customer_name: user.name || user.phone,
+          phone: user.phone,
+          address: "",
+          delivery_type: "delivery",
+          items: [
+            {
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              quantity,
+              image: product.image,
+              category: product.category,
+            },
+          ],
+          total: product.price * quantity,
+          note: "",
+          user_id: user.id,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        router.push(`/order/${data.order.id}`);
+      } else {
+        alert(data.error || "创建订单失败");
+      }
+    } catch {
+      alert("网络错误，请稍后重试");
+    }
+    setBuying(false);
+  };
 
   if (!product) {
     return (
@@ -75,7 +131,7 @@ export default function ProductDetailPage() {
   const emoji = categoryEmoji[product.category] || "📦";
 
   return (
-    <div className="section">
+    <div className="section pb-24 md:pb-12">
       <div className="container-airbnb">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm text-[var(--color-muted)] mb-8">
@@ -221,8 +277,8 @@ export default function ProductDetailPage() {
               </div>
             </div>
 
-            {/* Actions */}
-            <div className="flex items-center gap-3">
+            {/* Desktop Actions (hidden on mobile) */}
+            <div className="hidden md:flex items-center gap-3">
               <button
                 onClick={() => {
                   addItem(product, quantity);
@@ -235,12 +291,13 @@ export default function ProductDetailPage() {
               >
                 {addedToCart ? "✓ 已加入购物车" : "加入购物车"}
               </button>
-              <Link
-                href="/cart"
-                className="btn-secondary flex-1 text-base inline-flex items-center justify-center"
+              <button
+                onClick={handleBuyNow}
+                disabled={buying}
+                className="btn-secondary flex-1 text-base inline-flex items-center justify-center disabled:opacity-50"
               >
-                立即购买
-              </Link>
+                {buying ? "创建订单中..." : "立即购买"}
+              </button>
             </div>
           </div>
         </div>
@@ -277,6 +334,41 @@ export default function ProductDetailPage() {
             </div>
           </section>
         )}
+      </div>
+
+      {/* Mobile Bottom Fixed Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[var(--color-hairline-soft)] md:hidden">
+        <div className="flex items-center justify-between px-4 py-3">
+          <div className="flex items-baseline gap-1">
+            <span className="text-xl font-bold text-[var(--color-primary)]">
+              ¥{(product.price * quantity).toFixed(1)}
+            </span>
+            {product.originalPrice && (
+              <span className="text-xs text-[var(--color-muted-soft)] line-through">
+                ¥{product.originalPrice.toFixed(1)}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                addItem(product, quantity);
+                setAddedToCart(true);
+                setTimeout(() => setAddedToCart(false), 2000);
+              }}
+              className="px-5 py-2.5 rounded-full border border-[var(--color-primary)] text-[var(--color-primary)] text-sm font-semibold hover:bg-red-50 transition-colors"
+            >
+              {addedToCart ? "✓ 已加入" : "加入购物车"}
+            </button>
+            <button
+              onClick={handleBuyNow}
+              disabled={buying}
+              className="px-6 py-2.5 rounded-full bg-[var(--color-primary)] text-white text-sm font-semibold hover:bg-red-700 transition-colors disabled:opacity-50"
+            >
+              {buying ? "..." : "立即购买"}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

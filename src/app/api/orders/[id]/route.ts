@@ -48,3 +48,31 @@ export async function POST(
     );
   }
 }
+
+// 顾客取消订单（仅待付款状态可取消）
+export async function PATCH(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const order = getOrderById(id);
+    if (!order) {
+      return NextResponse.json({ error: "订单不存在" }, { status: 404 });
+    }
+    if (order.status !== "pending") {
+      return NextResponse.json(
+        { error: "只有待付款的订单才能取消" },
+        { status: 400 }
+      );
+    }
+    const updated = updateOrderStatus(id, "cancelled");
+    return NextResponse.json({ success: true, order: updated });
+  } catch (error) {
+    console.error("取消订单失败:", error);
+    return NextResponse.json(
+      { error: "取消订单失败" },
+      { status: 500 }
+    );
+  }
+}
