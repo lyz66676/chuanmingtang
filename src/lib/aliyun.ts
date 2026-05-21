@@ -40,19 +40,21 @@ function computeSignature(
 
 /**
  * 调用阿里云 SendSmsVerifyCode API 发送短信验证码
- * 使用 号码认证服务（PNVS），无需预注册签名和模板
+ * 使用 号码认证服务（PNVS）
  *
- * @param phoneNumber 手机号
- * @param accessKeyId 阿里云 AccessKey ID
- * @param accessKeySecret 阿里云 AccessKey Secret
- * @param verifyCode 可选的自定义验证码。如果不传，阿里云会自动生成
+ * 所需环境变量:
+ *   ALIYUN_ACCESS_KEY_ID      - 阿里云 AccessKey ID
+ *   ALIYUN_ACCESS_KEY_SECRET  - 阿里云 AccessKey Secret
+ *   ALIYUN_SMS_SIGN_NAME      - 短信签名（在阿里云短信服务中申请）
+ *   ALIYUN_SMS_TEMPLATE_CODE  - 短信模板CODE（在阿里云短信服务中申请）
  */
 export async function sendSmsVerifyCode(
   phoneNumber: string,
   accessKeyId: string,
   accessKeySecret: string,
   verifyCode?: string,
-  signName?: string
+  signName?: string,
+  templateCode?: string
 ): Promise<{ success: boolean; bizId?: string; message?: string }> {
   const params: AliyunParams = {
     Action: "SendSmsVerifyCode",
@@ -66,7 +68,7 @@ export async function sendSmsVerifyCode(
     PhoneNumber: phoneNumber,
     // 验证码长度 6 位数字
     CodeLength: "6",
-    // 验证码类型：数字
+    // 验证码类型：1=数字
     CodeType: "1",
     // 短信有效期（分钟）
     SmsUpExtendCode: "5",
@@ -75,6 +77,11 @@ export async function sendSmsVerifyCode(
   // 如果传入了短信签名，则使用它
   if (signName) {
     params.SignName = signName;
+  }
+
+  // 如果传入了短信模板CODE，则使用它
+  if (templateCode) {
+    params.TemplateCode = templateCode;
   }
 
   // 如果传入了自定义验证码，则使用它
