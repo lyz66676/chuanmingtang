@@ -40,23 +40,20 @@ function computeSignature(
 
 /**
  * 调用阿里云 SendSmsVerifyCode API 发送短信验证码
- * 使用 号码认证服务（PNVS）
+ * 使用 号码认证服务（PNVS），无需申请短信签名和模板
  *
  * 所需环境变量:
- *   ALIYUN_ACCESS_KEY_ID        - 阿里云 AccessKey ID
- *   ALIYUN_ACCESS_KEY_SECRET    - 阿里云 AccessKey Secret
- *   ALIYUN_SMS_SIGN_NAME        - 短信签名（在阿里云短信服务中申请）
- *   ALIYUN_SMS_TEMPLATE_CODE    - 短信模板CODE（在阿里云短信服务中申请）
- *   ALIYUN_SMS_TEMPLATE_PARAM   - 短信模板变量 JSON 字符串，如 {"code":"123456"}
+ *   ALIYUN_ACCESS_KEY_ID      - 阿里云 AccessKey ID
+ *   ALIYUN_ACCESS_KEY_SECRET  - 阿里云 AccessKey Secret
+ *
+ * 参考文档:
+ *   https://help.aliyun.com/zh/pnvs/developer-reference/api-dypnsapi-2017-05-25-sendsmsverifycode
  */
 export async function sendSmsVerifyCode(
   phoneNumber: string,
   accessKeyId: string,
   accessKeySecret: string,
-  verifyCode?: string,
-  signName?: string,
-  templateCode?: string,
-  templateParam?: string
+  verifyCode?: string
 ): Promise<{ success: boolean; bizId?: string; message?: string }> {
   const params: AliyunParams = {
     Action: "SendSmsVerifyCode",
@@ -76,22 +73,7 @@ export async function sendSmsVerifyCode(
     SmsUpExtendCode: "5",
   };
 
-  // 如果传入了短信签名，则使用它
-  if (signName) {
-    params.SignName = signName;
-  }
-
-  // 如果传入了短信模板CODE，则使用它
-  if (templateCode) {
-    params.TemplateCode = templateCode;
-  }
-
-  // 如果传入了短信模板变量（JSON 字符串），则使用它
-  if (templateParam) {
-    params.TemplateParam = templateParam;
-  }
-
-  // 如果传入了自定义验证码，则使用它
+  // 如果传入了自定义验证码，则使用它（不传则由阿里云自动生成）
   if (verifyCode) {
     params.VerifyCode = verifyCode;
   }

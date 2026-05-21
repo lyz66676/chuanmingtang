@@ -27,21 +27,13 @@ export async function POST(request: NextRequest) {
     // 生成 6 位随机验证码
     const code = String(Math.floor(100000 + Math.random() * 900000));
 
-    // 读取阿里云短信配置（在阿里云短信服务中申请）
-    const signName = process.env.ALIYUN_SMS_SIGN_NAME;
-    const templateCode = process.env.ALIYUN_SMS_TEMPLATE_CODE;
-    // 模板变量 JSON 字符串，如 {"code":"123456"}，可从环境变量读取或自动生成
-    const templateParam = process.env.ALIYUN_SMS_TEMPLATE_PARAM || JSON.stringify({ code });
-
     // 调用阿里云号码认证服务 SendSmsVerifyCode API
+    // 号码认证服务（PNVS）无需申请短信签名和模板，直接使用 AccessKey 即可
     const result = await sendSmsVerifyCode(
       phone,
       accessKeyId,
       accessKeySecret,
-      code,
-      signName,
-      templateCode,
-      templateParam
+      code
     );
 
     if (!result.success) {
