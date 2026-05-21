@@ -12,6 +12,8 @@ export async function POST(request: NextRequest) {
 
     const accessKeyId = process.env.ALIYUN_ACCESS_KEY_ID;
     const accessKeySecret = process.env.ALIYUN_ACCESS_KEY_SECRET;
+    const signName = process.env.ALIYUN_SMS_SIGN_NAME;
+    const templateCode = process.env.ALIYUN_SMS_TEMPLATE_CODE;
 
     // 如果没有配置阿里云凭证，回退到开发模式
     if (!accessKeyId || !accessKeySecret) {
@@ -24,15 +26,30 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // 检查是否配置了签名和模板
+    if (!signName || !templateCode) {
+      console.warn("[SMS] 未配置 ALIYUN_SMS_SIGN_NAME 或 ALIYUN_SMS_TEMPLATE_CODE，使用开发模式验证码 123456");
+      saveSmsCode(phone, "123456");
+      return NextResponse.json({
+        success: true,
+        message: "验证码已发送",
+        dev_mode: true,
+      });
+    }
+
     // 生成 6 位随机验证码
     const code = String(Math.floor(100000 + Math.random() * 900000));
 
     // 调用阿里云号码认证服务 SendSmsVerifyCode API
-    // 号码认证服务（PNVS）无需申请短信签名和模板，直接使用 AccessKey 即可
+    // 需要配置以下环境变量:
+    //   ALIYUN_SMS_SIGN_NAME     - 号码认证服务控制台 -> 赠送签名配置 中的签名名称
+    //   ALIYUN_SMS_TEMPLATE_CODE - 号码认证服务控制台 -> 赠送模板配置 中的模板 CODE
     const result = await sendSmsVerifyCode(
       phone,
       accessKeyId,
       accessKeySecret,
+      signName,
+      templateCode,
       code
     );
 

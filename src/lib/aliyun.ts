@@ -40,21 +40,40 @@ function computeSignature(
 
 /**
  * 调用阿里云 SendSmsVerifyCode API 发送短信验证码
- * 使用 号码认证服务（PNVS），无需申请短信签名和模板
+ * 使用 号码认证服务（PNVS），需使用系统赠送的签名和模板
  *
  * 所需环境变量:
- *   ALIYUN_ACCESS_KEY_ID      - 阿里云 AccessKey ID
- *   ALIYUN_ACCESS_KEY_SECRET  - 阿里云 AccessKey Secret
+ *   ALIYUN_ACCESS_KEY_ID       - 阿里云 AccessKey ID
+ *   ALIYUN_ACCESS_KEY_SECRET   - 阿里云 AccessKey Secret
+ *   ALIYUN_SMS_SIGN_NAME       - 号码认证服务控制台 -> 赠送签名配置 中的签名名称
+ *   ALIYUN_SMS_TEMPLATE_CODE   - 号码认证服务控制台 -> 赠送模板配置 中的模板 CODE
  *
  * 参考文档:
  *   https://help.aliyun.com/zh/pnvs/developer-reference/api-dypnsapi-2017-05-25-sendsmsverifycode
+ *
+ * 参数说明:
+ *   - SignName (必填): 签名名称，使用系统赠送的签名
+ *   - TemplateCode (必填): 短信模板 CODE，必须搭配赠送模板
+ *   - TemplateParam (必填): 模板参数，使用 ##code## 占位符让阿里云自动生成验证码
+ *     - 格式: {"code":"##code##","min":"5"}  (min=有效期分钟数)
+ *   - CodeType (条件必填): 当 TemplateParam 使用 ##code## 占位符时必填，1=数字
+ *   - CodeLength: 验证码长度（当不传 VerifyCode 时生效）
+ *   - VerifyCode (可选): 自定义验证码（传此值则阿里云不自动生成）
  */
 export async function sendSmsVerifyCode(
   phoneNumber: string,
   accessKeyId: string,
   accessKeySecret: string,
+  signName: string,
+  templateCode: string,
   verifyCode?: string
 ): Promise<{ success: boolean; bizId?: string; message?: string }> {
+  // 构建模板参数：使用 ##code## 占位符让阿里云自动生成，有效期 5 分钟
+  const templateParam = JSON.stringify({
+    code: "##code##",
+    min: "5",
+  });
+
   const params: AliyunParams = {
     Action: "SendSmsVerifyCode",
     Format: "JSON",
@@ -65,15 +84,21 @@ export async function sendSmsVerifyCode(
     SignatureNonce: `${Date.now()}${Math.random().toString(36).substring(2)}`,
     Timestamp: new Date().toISOString().replace(/\.\d{3}Z$/, "Z"),
     PhoneNumber: phoneNumber,
-    // 验证码长度 6 位数字
-    CodeLength: "6",
-    // 验证码类型：1=数字
+    // 必填：系统赠送的签名名称
+    SignName: signName,
+    // 必填：系统赠送的模板 CODE
+    TemplateCode: templateCode,
+    // 必填：模板参数，##code## 为占位符，阿里云自动生成验证码
+    TemplateParam: templateParam,
+    // 验证码类型：1=数字（当 TemplateParam 使用 ##code## 时必填）
     CodeType: "1",
-    // 短信有效期（分钟）
+    // 验证码长度
+    CodeLength: "6",
+    // 短信有效期扩展码（分钟）
     SmsUpExtendCode: "5",
   };
 
-  // 如果传入了自定义验证码，则使用它（不传则由阿里云自动生成）
+  // 如果传入了自定义验证码，则使用它（不传则由阿里云通过 ##code## 自动生成）
   if (verifyCode) {
     params.VerifyCode = verifyCode;
   }
