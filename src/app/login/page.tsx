@@ -346,20 +346,6 @@ export default function LoginPage() {
             </form>
           )}
 
-          {/* Footer */}
-          <div className="mt-6 text-center">
-            <p className="text-xs text-[var(--color-muted)]">
-              登录即表示您同意
-              <Link href="/about" className="text-[var(--color-primary)] hover:underline mx-1">
-                服务条款
-              </Link>
-              和
-              <Link href="/about" className="text-[var(--color-primary)] hover:underline mx-1">
-                隐私政策
-              </Link>
-            </p>
-          </div>
-
           {/* Back link */}
           <div className="mt-4 text-center">
             <Link href="/" className="text-sm text-[var(--color-muted)] hover:text-[var(--color-ink)] transition-colors">
