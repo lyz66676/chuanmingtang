@@ -27,9 +27,12 @@ export async function POST(request: NextRequest) {
     // 生成 6 位随机验证码
     const code = String(Math.floor(100000 + Math.random() * 900000));
 
+    // 读取短信签名（在阿里云短信服务中申请的签名名称）
+    const signName = process.env.ALIYUN_SMS_SIGN_NAME;
+
     // 调用阿里云号码认证服务 SendSmsVerifyCode API
     // 传入自定义验证码，让阿里云发送给用户
-    const result = await sendSmsVerifyCode(phone, accessKeyId, accessKeySecret, code);
+    const result = await sendSmsVerifyCode(phone, accessKeyId, accessKeySecret, code, signName);
 
     if (!result.success) {
       console.error("[SMS] 发送失败:", result.message);

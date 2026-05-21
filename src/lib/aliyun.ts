@@ -51,7 +51,8 @@ export async function sendSmsVerifyCode(
   phoneNumber: string,
   accessKeyId: string,
   accessKeySecret: string,
-  verifyCode?: string
+  verifyCode?: string,
+  signName?: string
 ): Promise<{ success: boolean; bizId?: string; message?: string }> {
   const params: AliyunParams = {
     Action: "SendSmsVerifyCode",
@@ -70,6 +71,11 @@ export async function sendSmsVerifyCode(
     // 短信有效期（分钟）
     SmsUpExtendCode: "5",
   };
+
+  // 如果传入了短信签名，则使用它
+  if (signName) {
+    params.SignName = signName;
+  }
 
   // 如果传入了自定义验证码，则使用它
   if (verifyCode) {
