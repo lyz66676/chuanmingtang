@@ -50,7 +50,7 @@ export default function ProductDetailPage() {
     return images;
   }, [product]);
 
-  // "立即购买" - 直接创建订单，跳过购物车（参考京东/淘宝做法）
+  // "立即购买" - 跳转到结算页，携带商品信息
   const handleBuyNow = async () => {
     if (!product) return;
 
@@ -60,46 +60,20 @@ export default function ProductDetailPage() {
       return;
     }
 
-    setBuying(true);
-    try {
-      const token = getToken();
-      const res = await fetch("/api/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          customer_name: user.name || user.phone,
-          phone: user.phone,
-          address: "",
-          delivery_type: "delivery",
-          items: [
-            {
-              id: product.id,
-              name: product.name,
-              price: product.price,
-              quantity,
-              image: product.image,
-              category: product.category,
-            },
-          ],
-          total: product.price * quantity,
-          note: "",
-          user_id: user.id,
-        }),
-      });
+    // 将商品信息存入 localStorage，供结算页读取
+    const buyNowItem = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      quantity,
+      image: product.image,
+      category: product.category,
+    };
+    localStorage.setItem("buyNowItem", JSON.stringify(buyNowItem));
+    localStorage.setItem("buyNowTotal", String(product.price * quantity));
 
-      const data = await res.json();
-      if (data.success) {
-        router.push(`/order/${data.order.id}`);
-      } else {
-        alert(data.error || "创建订单失败");
-      }
-    } catch {
-      alert("网络错误，请稍后重试");
-    }
-    setBuying(false);
+    // 跳转到结算页
+    router.push("/checkout?buyNow=1");
   };
 
   if (!product) {

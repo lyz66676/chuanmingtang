@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState, useEffect, useMemo } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { useAuth, getToken } from "@/context/AuthContext";
 
@@ -25,10 +25,30 @@ interface Address {
   is_default: number;
 }
 
-export default function CheckoutPage() {
+function CheckoutForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isBuyNow = searchParams.get("buyNow") === "1";
   const { items: cartItems, subtotal, clearCart } = useCart();
   const { user } = useAuth();
+
+  // "立即购买"模式：从 localStorage 读取商品数据
+  const buyNowItems = useMemo(() => {
+    if (!isBuyNow) return null;
+    try {
+      const stored = localStorage.getItem("buyNowItem");
+      const total = localStorage.getItem("buyNowTotal");
+      if (stored && total) {
+        return {
+          items: [JSON.parse(stored)],
+          total: Number(total),
+        };
+      }
+    } catch {
+      // ignore
+    }
+    return null;
+  }, [isBuyNow]);
 
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
@@ -37,6 +57,12 @@ export default function CheckoutPage() {
   const [note, setNote] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+
+  // 实际使用的商品列表和金额（放在 useState 之后）
+  const checkoutItems = isBuyNow && buyNowItems ? buyNowItems.items : cartItems;
+  const checkoutSubtotal = isBuyNow && buyNowItems ? buyNowItems.total : subtotal;
+  const shipping = checkoutSubtotal >= 99 ? 0 : 15;
+  const total = checkoutSubtotal + (deliveryType === "delivery" ? shipping : 0);
 
   // Address selector state
   const [savedAddresses, setSavedAddresses] = useState<Address[]>([]);
@@ -63,6 +89,7 @@ export default function CheckoutPage() {
         }
       })
       .catch(() => {});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const selectAddress = (addr: Address) => {
@@ -73,8 +100,6 @@ export default function CheckoutPage() {
     setShowAddressPicker(false);
   };
 
-  const shipping = subtotal >= 99 ? 0 : 15;
-  const total = subtotal + (deliveryType === "delivery" ? shipping : 0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,7 +123,7 @@ export default function CheckoutPage() {
           phone: phone.trim(),
           address: address.trim(),
           delivery_type: deliveryType,
-          items: cartItems.map((item) => ({
+          items: checkoutItems.map((item) => ({
             id: item.id,
             name: item.name,
             price: item.price,
@@ -119,7 +144,13 @@ export default function CheckoutPage() {
         return;
       }
 
-      clearCart();
+      if (!isBuyNow) {
+        clearCart();
+      } else {
+        // 清除"立即购买"的临时数据
+        localStorage.removeItem("buyNowItem");
+        localStorage.removeItem("buyNowTotal");
+      }
       router.push(`/order/${data.order.id}`);
     } catch {
       setError("网络错误，请稍后重试");
@@ -127,13 +158,17 @@ export default function CheckoutPage() {
     }
   };
 
-  if (cartItems.length === 0) {
+  if (checkoutItems.length === 0) {
     return (
       <div className="section">
         <div className="container-airbnb text-center py-20">
           <span className="text-6xl block mb-4">🛒</span>
-          <h3 className="text-lg font-semibold text-[var(--color-ink)] mb-2">购物车是空的</h3>
-          <p className="text-[var(--color-muted)] mb-6">请先添加商品到购物车</p>
+          <h3 className="text-lg font-semibold text-[var(--color-ink)] mb-2">
+            {isBuyNow ? "商品信息已过期" : "购物车是空的"}
+          </h3>
+          <p className="text-[var(--color-muted)] mb-6">
+            {isBuyNow ? "请重新选择商品" : "请先添加商品到购物车"}
+          </p>
           <Link href="/products" className="btn-primary inline-flex">去逛逛</Link>
         </div>
       </div>
@@ -308,7 +343,7 @@ export default function CheckoutPage() {
           <div className="card p-6">
             <h2 className="text-lg font-semibold text-[var(--color-ink)] mb-4">商品清单</h2>
             <div className="space-y-3">
-              {cartItems.map((item) => (
+              {checkoutItems.map((item) => (
                 <div key={item.id} className="flex items-center gap-3">
                   <span className="text-lg">{categoryEmoji[item.category] || "📦"}</span>
                   <div className="flex-1 min-w-0">
@@ -328,7 +363,7 @@ export default function CheckoutPage() {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-[var(--color-muted)]">商品小计</span>
-                <span className="font-semibold">¥{subtotal.toFixed(1)}</span>
+                <span className="font-semibold">¥{checkoutSubtotal.toFixed(1)}</span>
               </div>
               {deliveryType === "delivery" && (
                 <div className="flex justify-between">
@@ -369,5 +404,20 @@ export default function CheckoutPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={
+      <div className="section">
+        <div className="container-airbnb text-center py-20">
+          <div className="animate-spin w-8 h-8 border-2 border-[var(--color-primary)] border-t-transparent rounded-full mx-auto mb-4" />
+          <p className="text-[var(--color-muted)]">加载中...</p>
+        </div>
+      </div>
+    }>
+      <CheckoutForm />
+    </Suspense>
   );
 }

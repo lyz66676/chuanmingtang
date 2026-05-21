@@ -125,6 +125,15 @@ function initTables(db: Database.Database) {
       is_default    INTEGER DEFAULT 0,
       created_at    DATETIME DEFAULT (datetime('now', 'localtime'))
     );
+
+    CREATE TABLE IF NOT EXISTS sms_codes (
+      id            INTEGER PRIMARY KEY AUTOINCREMENT,
+      phone         TEXT NOT NULL,
+      code          TEXT NOT NULL,
+      expires_at    DATETIME NOT NULL,
+      used          INTEGER DEFAULT 0,
+      created_at    DATETIME DEFAULT (datetime('now', 'localtime'))
+    );
   `);
 
   // 兼容旧表：如果 orders 表没有 user_id 列则添加
@@ -402,4 +411,42 @@ export function setDefaultAddress(userId: string, addressId: string): Address | 
   db.prepare("UPDATE addresses SET is_default = 0 WHERE user_id = ?").run(userId);
   db.prepare("UPDATE addresses SET is_default = 1 WHERE id = ? AND user_id = ?").run(addressId, userId);
   return getAddressById(addressId);
+}
+
+/* ── SMS Verification Code ── */
+
+export function saveSmsCode(phone: string, code: string): void {
+  const db = getDb();
+  // 5 分钟有效期
+  const expiresAt = new Date(Date.now() + 5 * 60 * 1000)
+    .toISOString()
+    .replace("T", " ")
+    .slice(0, 19);
+  db.prepare(
+    "INSERT INTO sms_codes (phone, code, expires_at) VALUES (?, ?, ?)"
+  ).run(phone, code, expiresAt);
+}
+
+export function verifySmsCode(phone: string, code: string): boolean {
+  const db = getDb();
+  // 查找该手机号未使用且未过期的验证码
+  const row = db
+    .prepare(
+      `SELECT id FROM sms_codes
+       WHERE phone = ? AND code = ? AND used = 0 AND expires_at > datetime('now', 'localtime')
+       ORDER BY created_at DESC LIMIT 1`
+    )
+    .get(phone, code) as { id: number } | undefined;
+
+  if (!row) return false;
+
+  // 标记为已使用
+  db.prepare("UPDATE sms_codes SET used = 1 WHERE id = ?").run(row.id);
+  return true;
+}
+
+/** 清理过期的验证码 */
+export function cleanExpiredSmsCodes(): void {
+  const db = getDb();
+  db.prepare("DELETE FROM sms_codes WHERE expires_at <= datetime('now', 'localtime')").run();
 }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateToken } from "@/lib/auth";
-import { createUser, getUserByPhone, createRefreshToken } from "@/lib/db";
+import { createUser, getUserByPhone, createRefreshToken, verifySmsCode } from "@/lib/db";
 import crypto from "crypto";
 
 export async function POST(request: NextRequest) {
@@ -15,10 +15,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "请输入验证码" }, { status: 400 });
     }
 
-    // 开发阶段：验证码固定为 123456
-    // 上线后：需要校验短信验证码
-    if (code !== "123456") {
-      return NextResponse.json({ error: "验证码错误" }, { status: 401 });
+    // 验证短信验证码（从数据库中校验）
+    const isValid = verifySmsCode(phone, code);
+    if (!isValid) {
+      return NextResponse.json({ error: "验证码错误或已过期" }, { status: 401 });
     }
 
     // 查找或创建用户
