@@ -1,8 +1,16 @@
-import Database from "better-sqlite3";
+/**
+ * 轻量级 JSON 文件数据库（开发模式）
+ *
+ * 用 JSON 文件持久化数据，替代需要原生编译的 better-sqlite3。
+ * API 与之前的 better-sqlite3 版本完全兼容（同步调用）。
+ */
+
 import path from "path";
+import fs from "fs";
 import crypto from "crypto";
 
-const DB_PATH = path.join(process.cwd(), "data", "orders.db");
+const DATA_DIR = path.join(process.cwd(), "data");
+const DB_FILE = path.join(DATA_DIR, "db.json");
 
 /* ── Types ── */
 
@@ -29,6 +37,7 @@ export interface User {
   id: string;
   phone: string;
   name: string;
+  password?: string;
   created_at: string;
   updated_at: string;
 }
@@ -64,427 +73,343 @@ export interface AddressInput {
   is_default?: number;
 }
 
-/* ── Database ── */
-
-let db: Database.Database | null = null;
-
-export function getDb(): Database.Database {
-  if (!db) {
-    db = new Database(DB_PATH);
-    db.pragma("journal_mode = WAL");
-    initTables(db);
-  }
-  return db;
+interface SmsCode {
+  id: number;
+  phone: string;
+  code: string;
+  expires_at: string;
+  used: number;
 }
 
-function initTables(db: Database.Database) {
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS orders (
-      id            TEXT PRIMARY KEY,
-      customer_name TEXT NOT NULL,
-      phone         TEXT NOT NULL,
-      address       TEXT DEFAULT '',
-      delivery_type TEXT NOT NULL CHECK(delivery_type IN ('delivery', 'pickup')),
-      items         TEXT NOT NULL,
-      total         REAL NOT NULL,
-      status        TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','paid','shipped','ready','completed','cancelled')),
-      note          TEXT DEFAULT '',
-      tracking_no   TEXT DEFAULT '',
-      pay_type      TEXT DEFAULT '',
-      pay_status    TEXT DEFAULT 'unpaid' CHECK(pay_status IN ('unpaid','paid')),
-      pay_time      DATETIME,
-      user_id       TEXT DEFAULT '',
-      created_at    DATETIME DEFAULT (datetime('now', 'localtime')),
-      updated_at    DATETIME DEFAULT (datetime('now', 'localtime'))
-    );
+interface Store {
+  orders: Record<string, Order>;
+  users: Record<string, User>;
+  refreshTokens: Record<string, RefreshToken>;
+  addresses: Record<string, Address>;
+  smsCodes: SmsCode[];
+  nextSmsId: number;
+}
 
-    CREATE TABLE IF NOT EXISTS users (
-      id            TEXT PRIMARY KEY,
-      phone         TEXT UNIQUE NOT NULL,
-      name          TEXT DEFAULT '',
-      password      TEXT DEFAULT '',
-      created_at    DATETIME DEFAULT (datetime('now', 'localtime')),
-      updated_at    DATETIME DEFAULT (datetime('now', 'localtime'))
-    );
+/* ── Store ── */
 
-    CREATE TABLE IF NOT EXISTS refresh_tokens (
-      id            TEXT PRIMARY KEY,
-      user_id       TEXT NOT NULL REFERENCES users(id),
-      token         TEXT UNIQUE NOT NULL,
-      expires_at    DATETIME NOT NULL,
-      created_at    DATETIME DEFAULT (datetime('now', 'localtime'))
-    );
+let store: Store = {
+  orders: {},
+  users: {},
+  refreshTokens: {},
+  addresses: {},
+  smsCodes: [],
+  nextSmsId: 1,
+};
 
-    CREATE TABLE IF NOT EXISTS addresses (
-      id            TEXT PRIMARY KEY,
-      user_id       TEXT NOT NULL REFERENCES users(id),
-      name          TEXT NOT NULL,
-      phone         TEXT NOT NULL,
-      province      TEXT DEFAULT '',
-      city          TEXT DEFAULT '',
-      district      TEXT DEFAULT '',
-      detail        TEXT NOT NULL,
-      is_default    INTEGER DEFAULT 0,
-      created_at    DATETIME DEFAULT (datetime('now', 'localtime'))
-    );
-
-    CREATE TABLE IF NOT EXISTS sms_codes (
-      id            INTEGER PRIMARY KEY AUTOINCREMENT,
-      phone         TEXT NOT NULL,
-      code          TEXT NOT NULL,
-      expires_at    DATETIME NOT NULL,
-      used          INTEGER DEFAULT 0,
-      created_at    DATETIME DEFAULT (datetime('now', 'localtime'))
-    );
-  `);
-
-  // 兼容旧表
+function loadStore(): void {
   try {
-    db.exec(`ALTER TABLE orders ADD COLUMN user_id TEXT DEFAULT ''`);
-  } catch {
-    // 列已存在，忽略
-  }
-  try {
-    db.exec(`ALTER TABLE users ADD COLUMN password TEXT DEFAULT ''`);
-  } catch {
-    // 列已存在，忽略
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    if (fs.existsSync(DB_FILE)) {
+      const raw = fs.readFileSync(DB_FILE, "utf-8");
+      store = JSON.parse(raw);
+    }
+  } catch (err) {
+    console.warn("[DB] 加载失败，使用空数据:", err);
   }
 }
 
-/* ── Order ID ── */
+function saveStore(): void {
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    fs.writeFileSync(DB_FILE, JSON.stringify(store, null, 2), "utf-8");
+  } catch (err) {
+    console.error("[DB] 保存失败:", err);
+  }
+}
+
+// 启动时加载
+loadStore();
+
+/* ── 工具函数 ── */
+
+const now = () =>
+  new Date().toISOString().replace("T", " ").slice(0, 19);
+
+/* ── Order ── */
 
 /** 生成订单号: DD + 日期 + 4位序号 */
 export function generateOrderId(): string {
-  const db = getDb();
   const today = new Date();
   const dateStr =
     today.getFullYear().toString() +
     String(today.getMonth() + 1).padStart(2, "0") +
     String(today.getDate()).padStart(2, "0");
 
-  const row = db
-    .prepare(
-      `SELECT COUNT(*) as cnt FROM orders WHERE id LIKE ?`
-    )
-    .get(`DD${dateStr}%`) as { cnt: number } | undefined;
-
-  const seq = ((row?.cnt ?? 0) + 1).toString().padStart(4, "0");
-  return `DD${dateStr}${seq}`;
+  const prefix = `DD${dateStr}`;
+  const existing = Object.values(store.orders).filter((o) => o.id.startsWith(prefix));
+  const seq = (existing.length + 1).toString().padStart(4, "0");
+  return `${prefix}${seq}`;
 }
-
-/* ── Order CRUD ── */
 
 export interface OrderInput {
   customer_name: string;
   phone: string;
   address?: string;
   delivery_type: "delivery" | "pickup";
-  items: string; // JSON string
+  items: string;
   total: number;
   note?: string;
   user_id?: string;
 }
 
 export function createOrder(input: OrderInput): Order | null {
-  const db = getDb();
   const id = generateOrderId();
-
-  const stmt = db.prepare(`
-    INSERT INTO orders (id, customer_name, phone, address, delivery_type, items, total, note, user_id)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `);
-
-  stmt.run(
+  const order: Order = {
     id,
-    input.customer_name,
-    input.phone,
-    input.address || "",
-    input.delivery_type,
-    input.items,
-    input.total,
-    input.note || "",
-    input.user_id || ""
-  );
-
-  return getOrderById(id);
+    customer_name: input.customer_name,
+    phone: input.phone,
+    address: input.address || "",
+    delivery_type: input.delivery_type,
+    items: JSON.parse(input.items),
+    total: input.total,
+    status: "pending",
+    note: input.note || "",
+    tracking_no: "",
+    pay_type: "",
+    pay_status: "unpaid",
+    pay_time: null,
+    user_id: input.user_id || "",
+    created_at: now(),
+    updated_at: now(),
+  };
+  store.orders[id] = order;
+  saveStore();
+  return order;
 }
 
 export function getOrderById(id: string): Order | null {
-  const db = getDb();
-  const row = db.prepare("SELECT * FROM orders WHERE id = ?").get(id) as Record<string, unknown> | undefined;
-  if (!row) return null;
-  return {
-    ...row,
-    items: JSON.parse(row.items as string),
-  } as Order;
+  return store.orders[id] || null;
 }
 
 export function getOrdersByPhone(phone: string): Order[] {
-  const db = getDb();
-  const rows = db
-    .prepare("SELECT * FROM orders WHERE phone = ? ORDER BY created_at DESC")
-    .all(phone) as Record<string, unknown>[];
-  return rows.map((row) => ({
-    ...row,
-    items: JSON.parse(row.items as string),
-  })) as Order[];
+  return Object.values(store.orders)
+    .filter((o) => o.phone === phone)
+    .sort((a, b) => (b.created_at > a.created_at ? 1 : -1));
 }
 
 export function getOrdersByUserId(userId: string): Order[] {
-  const db = getDb();
-  const rows = db
-    .prepare("SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC")
-    .all(userId) as Record<string, unknown>[];
-  return rows.map((row) => ({
-    ...row,
-    items: JSON.parse(row.items as string),
-  })) as Order[];
+  return Object.values(store.orders)
+    .filter((o) => o.user_id === userId)
+    .sort((a, b) => (b.created_at > a.created_at ? 1 : -1));
 }
 
 export function getAllOrders(status?: string): Order[] {
-  const db = getDb();
-  let rows: Record<string, unknown>[];
-  if (status) {
-    rows = db
-      .prepare("SELECT * FROM orders WHERE status = ? ORDER BY created_at DESC")
-      .all(status) as Record<string, unknown>[];
-  } else {
-    rows = db
-      .prepare("SELECT * FROM orders ORDER BY created_at DESC")
-      .all() as Record<string, unknown>[];
-  }
-  return rows.map((row) => ({
-    ...row,
-    items: JSON.parse(row.items as string),
-  })) as Order[];
+  const all = Object.values(store.orders).sort((a, b) =>
+    b.created_at > a.created_at ? 1 : -1
+  );
+  return status ? all.filter((o) => o.status === status) : all;
 }
 
 export function updateOrderStatus(id: string, status: string, extra: Record<string, unknown> = {}): Order | null {
-  const db = getDb();
-  const sets = ["status = ?", "updated_at = datetime('now', 'localtime')"];
-  const values: unknown[] = [status];
-
+  const order = store.orders[id];
+  if (!order) return null;
+  order.status = status as Order["status"];
+  order.updated_at = now();
   for (const [key, val] of Object.entries(extra)) {
-    sets.push(`${key} = ?`);
-    values.push(val);
+    (order as unknown as Record<string, unknown>)[key] = val;
   }
-
-  values.push(id);
-  db.prepare(`UPDATE orders SET ${sets.join(", ")} WHERE id = ?`).run(...values);
-  return getOrderById(id);
+  saveStore();
+  return order;
 }
 
-export function getOrderStats() {
-  const db = getDb();
-  const rows = db
-    .prepare(
-      `SELECT status, COUNT(*) as count FROM orders GROUP BY status`
-    )
-    .all() as { status: string; count: number }[];
+export function getOrderStats(): Record<string, number> {
   const stats: Record<string, number> = {};
-  for (const row of rows) {
-    stats[row.status] = row.count;
+  for (const order of Object.values(store.orders)) {
+    stats[order.status] = (stats[order.status] || 0) + 1;
   }
   return stats;
 }
 
-/* ── User CRUD ── */
+/* ── User ── */
 
 export function createUser(phone: string): User {
-  const db = getDb();
   const id = `U${Date.now()}`;
-  db.prepare("INSERT INTO users (id, phone) VALUES (?, ?)").run(id, phone);
-  return getUserById(id)!;
+  const user: User = {
+    id,
+    phone,
+    name: "",
+    created_at: now(),
+    updated_at: now(),
+  };
+  store.users[id] = user;
+  saveStore();
+  return user;
 }
 
 export function getUserByPhone(phone: string): User | null {
-  const db = getDb();
-  const row = db.prepare("SELECT * FROM users WHERE phone = ?").get(phone) as Record<string, unknown> | undefined;
-  if (!row) return null;
-  return row as unknown as User;
+  return Object.values(store.users).find((u) => u.phone === phone) || null;
 }
 
 export function getUserById(id: string): User | null {
-  const db = getDb();
-  const row = db.prepare("SELECT * FROM users WHERE id = ?").get(id) as Record<string, unknown> | undefined;
-  if (!row) return null;
-  return row as unknown as User;
+  return store.users[id] || null;
 }
 
 export function updateUserName(userId: string, name: string): User | null {
-  const db = getDb();
-  db.prepare("UPDATE users SET name = ?, updated_at = datetime('now', 'localtime') WHERE id = ?").run(name, userId);
-  return getUserById(userId);
+  const user = store.users[userId];
+  if (!user) return null;
+  user.name = name;
+  user.updated_at = now();
+  saveStore();
+  return user;
 }
 
-/* ── Refresh Token CRUD ── */
+/* ── Refresh Token ── */
 
 export function createRefreshToken(userId: string, token: string, expiresAt: string): void {
-  const db = getDb();
   const id = `RT${Date.now()}`;
-  db.prepare("INSERT INTO refresh_tokens (id, user_id, token, expires_at) VALUES (?, ?, ?, ?)").run(id, userId, token, expiresAt);
+  store.refreshTokens[id] = { id, user_id: userId, token, expires_at: expiresAt, created_at: now() };
+  saveStore();
 }
 
 export function getRefreshToken(token: string): RefreshToken | null {
-  const db = getDb();
-  const row = db.prepare("SELECT * FROM refresh_tokens WHERE token = ?").get(token) as Record<string, unknown> | undefined;
-  if (!row) return null;
-  return row as unknown as RefreshToken;
+  return Object.values(store.refreshTokens).find((t) => t.token === token) || null;
 }
 
 export function deleteRefreshToken(token: string): void {
-  const db = getDb();
-  db.prepare("DELETE FROM refresh_tokens WHERE token = ?").run(token);
+  const entry = Object.values(store.refreshTokens).find((t) => t.token === token);
+  if (entry) {
+    delete store.refreshTokens[entry.id];
+    saveStore();
+  }
 }
 
 export function deleteExpiredRefreshTokens(): void {
-  const db = getDb();
-  db.prepare("DELETE FROM refresh_tokens WHERE expires_at < datetime('now')").run();
+  const nowStr = now();
+  for (const [id, t] of Object.entries(store.refreshTokens)) {
+    if (t.expires_at < nowStr) {
+      delete store.refreshTokens[id];
+    }
+  }
+  saveStore();
 }
 
-/* ── Address CRUD ── */
+/* ── Address ── */
 
 export function createAddress(userId: string, data: AddressInput): Address {
-  const db = getDb();
   const id = `A${Date.now()}`;
-
-  // 如果设为默认，先清除其他默认地址
   if (data.is_default === 1) {
-    db.prepare("UPDATE addresses SET is_default = 0 WHERE user_id = ?").run(userId);
+    for (const addr of Object.values(store.addresses)) {
+      if (addr.user_id === userId) addr.is_default = 0;
+    }
   }
-
-  db.prepare(`
-    INSERT INTO addresses (id, user_id, name, phone, province, city, district, detail, is_default)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(id, userId, data.name, data.phone, data.province || "", data.city || "", data.district || "", data.detail, data.is_default || 0);
-
-  return getAddressById(id)!;
+  const address: Address = {
+    id,
+    user_id: userId,
+    name: data.name,
+    phone: data.phone,
+    province: data.province || "",
+    city: data.city || "",
+    district: data.district || "",
+    detail: data.detail,
+    is_default: data.is_default || 0,
+    created_at: now(),
+  };
+  store.addresses[id] = address;
+  saveStore();
+  return address;
 }
 
 export function getAddressesByUser(userId: string): Address[] {
-  const db = getDb();
-  const rows = db
-    .prepare("SELECT * FROM addresses WHERE user_id = ? ORDER BY is_default DESC, created_at DESC")
-    .all(userId) as Record<string, unknown>[];
-  return rows as unknown as Address[];
+  return Object.values(store.addresses)
+    .filter((a) => a.user_id === userId)
+    .sort((a, b) => b.is_default - a.is_default);
 }
 
 export function getAddressById(id: string): Address | null {
-  const db = getDb();
-  const row = db.prepare("SELECT * FROM addresses WHERE id = ?").get(id) as Record<string, unknown> | undefined;
-  if (!row) return null;
-  return row as unknown as Address;
+  return store.addresses[id] || null;
 }
 
 export function updateAddress(id: string, data: Partial<AddressInput>): Address | null {
-  const db = getDb();
-  const existing = getAddressById(id);
-  if (!existing) return null;
-
-  const fields: string[] = [];
-  const values: unknown[] = [];
-
-  for (const key of ["name", "phone", "province", "city", "district", "detail"] as const) {
-    if (data[key] !== undefined) {
-      fields.push(`${key} = ?`);
-      values.push(data[key]);
-    }
-  }
+  const addr = store.addresses[id];
+  if (!addr) return null;
 
   if (data.is_default !== undefined) {
-    // 如果设为默认，先清除其他默认地址
     if (data.is_default === 1) {
-      db.prepare("UPDATE addresses SET is_default = 0 WHERE user_id = ? AND id != ?").run(existing.user_id, id);
+      for (const a of Object.values(store.addresses)) {
+        if (a.user_id === addr.user_id && a.id !== id) a.is_default = 0;
+      }
     }
-    fields.push("is_default = ?");
-    values.push(data.is_default);
+    addr.is_default = data.is_default;
   }
-
-  if (fields.length > 0) {
-    values.push(id);
-    db.prepare(`UPDATE addresses SET ${fields.join(", ")} WHERE id = ?`).run(...values);
+  for (const key of ["name", "phone", "province", "city", "district", "detail"] as const) {
+    if (data[key] !== undefined) (addr as unknown as Record<string, unknown>)[key] = data[key];
   }
-
-  return getAddressById(id);
+  saveStore();
+  return addr;
 }
 
 export function deleteAddress(id: string): void {
-  const db = getDb();
-  db.prepare("DELETE FROM addresses WHERE id = ?").run(id);
+  delete store.addresses[id];
+  saveStore();
 }
 
 export function setDefaultAddress(userId: string, addressId: string): Address | null {
-  const db = getDb();
-  db.prepare("UPDATE addresses SET is_default = 0 WHERE user_id = ?").run(userId);
-  db.prepare("UPDATE addresses SET is_default = 1 WHERE id = ? AND user_id = ?").run(addressId, userId);
-  return getAddressById(addressId);
+  for (const addr of Object.values(store.addresses)) {
+    if (addr.user_id === userId) addr.is_default = 0;
+  }
+  const addr = store.addresses[addressId];
+  if (addr) {
+    addr.is_default = 1;
+    saveStore();
+  }
+  return addr || null;
 }
 
-/* ── SMS Verification Code ── */
+/* ── SMS ── */
 
 export function saveSmsCode(phone: string, code: string): void {
-  const db = getDb();
-  // 5 分钟有效期
   const expiresAt = new Date(Date.now() + 5 * 60 * 1000)
     .toISOString()
     .replace("T", " ")
     .slice(0, 19);
-  db.prepare(
-    "INSERT INTO sms_codes (phone, code, expires_at) VALUES (?, ?, ?)"
-  ).run(phone, code, expiresAt);
+  store.smsCodes.push({ id: store.nextSmsId++, phone, code, expires_at: expiresAt, used: 0 });
+  saveStore();
 }
 
 export function verifySmsCode(phone: string, code: string): boolean {
-  const db = getDb();
-  // 查找该手机号未使用且未过期的验证码
-  const row = db
-    .prepare(
-      `SELECT id FROM sms_codes
-       WHERE phone = ? AND code = ? AND used = 0 AND expires_at > datetime('now', 'localtime')
-       ORDER BY created_at DESC LIMIT 1`
-    )
-    .get(phone, code) as { id: number } | undefined;
-
-  if (!row) return false;
-
-  // 标记为已使用
-  db.prepare("UPDATE sms_codes SET used = 1 WHERE id = ?").run(row.id);
+  const nowStr = now();
+  const found = store.smsCodes.find(
+    (s) => s.phone === phone && s.code === code && s.used === 0 && s.expires_at > nowStr
+  );
+  if (!found) return false;
+  found.used = 1;
+  saveStore();
   return true;
 }
 
-/** 清理过期的验证码 */
 export function cleanExpiredSmsCodes(): void {
-  const db = getDb();
-  db.prepare("DELETE FROM sms_codes WHERE expires_at <= datetime('now', 'localtime')").run();
+  const nowStr = now();
+  store.smsCodes = store.smsCodes.filter((s) => s.expires_at > nowStr);
+  saveStore();
 }
 
 /* ── Password ── */
 
-/** 设置密码（首次注册时设置，或忘记密码后重置） */
 export function setPassword(phone: string, password: string): boolean {
-  const db = getDb();
-  const hashed = crypto.createHash("sha256").update(password).digest("hex");
-  const result = db
-    .prepare("UPDATE users SET password = ?, updated_at = datetime('now', 'localtime') WHERE phone = ?")
-    .run(hashed, phone);
-  return result.changes > 0;
+  const user = Object.values(store.users).find((u) => u.phone === phone);
+  if (!user) return false;
+  user.password = crypto.createHash("sha256").update(password).digest("hex");
+  user.updated_at = now();
+  saveStore();
+  return true;
 }
 
-/** 验证密码 */
 export function verifyPassword(phone: string, password: string): boolean {
-  const db = getDb();
   const hashed = crypto.createHash("sha256").update(password).digest("hex");
-  const row = db
-    .prepare("SELECT id FROM users WHERE phone = ? AND password = ?")
-    .get(phone, hashed) as { id: string } | undefined;
-  return !!row;
+  const user = Object.values(store.users).find((u) => u.phone === phone && u.password === hashed);
+  return !!user;
 }
 
-/** 检查用户是否已设置密码 */
 export function hasPassword(phone: string): boolean {
-  const db = getDb();
-  const row = db
-    .prepare("SELECT password FROM users WHERE phone = ?")
-    .get(phone) as { password: string } | undefined;
-  return !!row && row.password !== "";
+  const user = Object.values(store.users).find((u) => u.phone === phone);
+  return !!user && !!user.password && user.password !== "";
 }

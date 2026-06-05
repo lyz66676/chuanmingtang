@@ -1,119 +1,108 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getOrderById, updateOrderStatus } from "@/lib/db";
-import crypto from "crypto";
+import { getOrderById, updateOrderStatus, getAllOrders } from "@/lib/db";
+import { verifyCallback } from "@/lib/wechat-store";
 
 /**
- * 收钱吧支付结果回调
+ * 微信小店支付结果回调
  *
- * 收钱吧在顾客支付成功后，会向此地址发送 POST 请求通知支付结果。
- * 需要后续在收钱吧商户后台配置回调地址为：
- *   https://您的域名/api/pay/callback
+ * 微信小店在订单状态变更时 POST 通知到此地址。
+ * 使用 SHA256WithRSA 验签，验证通过后更新订单状态。
  *
- * 收钱吧回调参数格式（根据收钱吧官方文档）：
+ * 回调格式：
  * {
- *   "order_id": "商户订单号",
- *   "trade_no": "收钱吧交易号",
- *   "total_fee": "支付金额（分）",
- *   "status": "SUCCESS",
- *   "sign": "签名"
+ *   "eventId": 123,
+ *   "timestamp": 1706679507593,
+ *   "nonce": "random_string",
+ *   "content": "{\"orderSn\":\"...\",\"orderStateCode\":35,\"preOrderList\":[...]}",
+ *   "signature": "base64_rsa_signature"
  * }
  *
- * 签名算法：
- *   1. 将参数按 key 排序（排除 sign 字段）
- *   2. 拼接成 key1=value1&key2=value2 格式
- *   3. 末尾拼接 &key={API_KEY}
- *   4. 计算 MD5 大写
+ * orderStateCode: 35 = 支付成功
  */
-
-// 收钱吧 API 密钥（从环境变量读取，开发模式使用默认值）
-const SHOUQIANBA_API_KEY = process.env.SHOUQIANBA_API_KEY || "dev_shouqianba_api_key_123456";
-
-/**
- * 验证收钱吧回调签名
- */
-function verifySign(params: Record<string, unknown>, apiKey: string): boolean {
-  try {
-    // 1. 提取签名
-    const sign = params.sign as string;
-    if (!sign) return false;
-
-    // 2. 排除 sign 字段，按 key 排序
-    const sortedKeys = Object.keys(params)
-      .filter((key) => key !== "sign")
-      .sort();
-
-    // 3. 拼接 key=value 字符串
-    const signStr = sortedKeys
-      .map((key) => `${key}=${params[key]}`)
-      .join("&");
-
-    // 4. 末尾拼接 &key={API_KEY}
-    const rawStr = `${signStr}&key=${apiKey}`;
-
-    // 5. 计算 MD5 大写
-    const expectedSign = crypto.createHash("md5").update(rawStr).digest("hex").toUpperCase();
-
-    return expectedSign === sign;
-  } catch {
-    return false;
-  }
-}
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    console.log("收钱吧回调收到:", JSON.stringify(body));
+    console.log("[微信小店] 回调收到:", JSON.stringify(body).slice(0, 500));
 
-    // 验证签名
-    const isValid = verifySign(body, SHOUQIANBA_API_KEY);
-    if (!isValid) {
-      console.warn("签名验证失败，回调数据:", JSON.stringify(body));
-      // 开发模式下不阻止支付成功处理
-      if (process.env.NODE_ENV === "production") {
-        return NextResponse.json(
-          { result_code: "FAIL", error: "签名验证失败" },
-          { status: 401 }
-        );
+    // 1. 验证签名并解析内容
+    const content = verifyCallback(body);
+
+    if (!content) {
+      console.warn("[微信小店] 回调验签失败或内容解析失败");
+      return NextResponse.json(
+        { error: "签名验证失败" },
+        { status: 401 }
+      );
+    }
+
+    console.log(
+      `[微信小店] 回调验证通过: orderSn=${content.orderSn}, stateCode=${content.orderStateCode}`
+    );
+
+    // 2. 从回调 content 中查找预订单 ID
+    // content 中可能包含 preOrderList，里面有所关联的 preOrderId
+    let preOrderId: string | null = null;
+
+    if (content.preOrderList && Array.isArray(content.preOrderList)) {
+      const firstPreOrder = content.preOrderList[0];
+      if (firstPreOrder) {
+        preOrderId =
+          (firstPreOrder as Record<string, unknown>).preOrderId as string ||
+          (firstPreOrder as Record<string, unknown>).id as string;
       }
-      console.log("开发模式：跳过签名验证");
     }
 
-    const { order_id, status } = body;
+    // 3. 通过 preOrderId 匹配我们的订单
+    let order = preOrderId
+      ? getOrderById(preOrderId) // 尝试直接用 preOrderId 查
+      : null;
 
-    if (!order_id) {
-      return NextResponse.json(
-        { result_code: "FAIL", error: "缺少订单号" },
-        { status: 400 }
-      );
+    if (!order && preOrderId) {
+      // 搜索所有订单，根据 tracking_no（保存的 preOrderId）匹配
+      const allOrders = getAllOrders();
+      order =
+        allOrders.find((o) => o.tracking_no === preOrderId) || null;
     }
 
-    const order = getOrderById(order_id);
     if (!order) {
-      return NextResponse.json(
-        { result_code: "FAIL", error: "订单不存在" },
-        { status: 404 }
+      console.warn(
+        `[微信小店] 未找到匹配订单 preOrderId=${preOrderId}`
       );
-    }
-
-    if (order.pay_status === "paid") {
-      console.log(`订单 ${order_id} 已支付，忽略重复回调`);
+      // 微信小店要求返回 SUCCESS 确认收到回调
       return NextResponse.json({ result_code: "SUCCESS" });
     }
 
-    if (status === "SUCCESS") {
-      updateOrderStatus(order_id, "paid", {
-        pay_status: "paid",
-        pay_time: new Date().toISOString(),
-      });
-      console.log(`订单 ${order_id} 支付成功`);
-
-      // TODO: 可选 - 发送邮件/短信通知管理员
+    // 4. 防止重复处理
+    if (order.pay_status === "paid") {
+      console.log(`[微信小店] 订单 ${order.id} 已支付，忽略重复回调`);
+      return NextResponse.json({ result_code: "SUCCESS" });
     }
 
-    // 收钱吧要求返回特定格式的成功响应
+    // 5. 判断是否支付成功
+    // orderStateCode: 35 = 支付成功（根据文档示例）
+    const isPaid = content.orderStateCode === 35;
+
+    if (isPaid) {
+      updateOrderStatus(order.id, order.delivery_type === "pickup" ? "paid" : "paid", {
+        pay_status: "paid",
+        pay_time: new Date().toISOString(),
+        // 保存微信小店订单号
+        tracking_no: content.orderSn || order.tracking_no,
+      });
+
+      console.log(
+        `[微信小店] 订单 ${order.id} 支付成功，小店订单号: ${content.orderSn}`
+      );
+    } else {
+      console.log(
+        `[微信小店] 订单 ${order.id} 未支付，状态码: ${content.orderStateCode}`
+      );
+    }
+
+    // 微信小店要求返回 SUCCESS 确认收到回调
     return NextResponse.json({ result_code: "SUCCESS" });
   } catch (error) {
-    console.error("支付回调处理失败:", error);
+    console.error("[微信小店] 回调处理失败:", error);
     return NextResponse.json(
       { result_code: "FAIL", error: "处理失败" },
       { status: 500 }

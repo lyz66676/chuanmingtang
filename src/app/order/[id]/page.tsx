@@ -248,27 +248,39 @@ export default function OrderDetailPage() {
           </div>
         </div>
 
-        {/* 支付（待付款状态 - 微信收款码） */}
+        {/* 支付（待付款状态） */}
         {order.pay_status === "unpaid" && order.status !== "cancelled" && (
           <div className="card p-6 mb-6 text-center">
             <h2 className="text-lg font-semibold text-[var(--color-ink)] mb-4">
-              💳 微信支付
+              💳 在线支付
             </h2>
             <p className="text-3xl font-bold text-[var(--color-primary)] mb-4">
               ¥{order.total.toFixed(1)}
             </p>
-            <div className="bg-white p-4 rounded-xl inline-block mb-4 shadow-sm">
-              <img
-                src="/wechat-pay.jpg"
-                alt="微信收款码"
-                className="w-48 h-48 object-contain mx-auto"
-              />
-            </div>
-            <p className="text-sm text-[var(--color-muted)] mb-3">
-              请使用微信扫描上方二维码完成付款
-            </p>
-            <p className="text-xs text-amber-600 bg-amber-50 rounded-lg px-3 py-2">
-              ⚠️ 付款后请等待管理员确认收款，订单状态将自动更新
+
+            <button
+              onClick={handlePay}
+              disabled={paying}
+              className="btn-primary w-full text-base py-3 mb-3 flex items-center justify-center gap-2"
+            >
+              {paying ? (
+                <>
+                  <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  正在跳转支付...
+                </>
+              ) : (
+                "去付款"
+              )}
+            </button>
+
+            {payError && (
+              <p className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2 mt-2">
+                {payError}
+              </p>
+            )}
+
+            <p className="text-xs text-[var(--color-muted)] mt-2">
+              支持微信、支付宝等在线支付方式
             </p>
           </div>
         )}

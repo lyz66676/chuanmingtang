@@ -1,96 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getOrderById, updateOrderStatus } from "@/lib/db";
-import crypto from "crypto";
+import { createPreOrder, generateH5Link } from "@/lib/wechat-store";
 
 /**
  * 支付创建接口
  *
- * 收钱吧 H5 支付（JSAPI）流程：
+ * 微信小店 H5 支付流程：
  * 1. 前端 POST 此接口，传入 order_id
- * 2. 后端调用收钱吧 API 创建支付订单，获取支付页面 URL
- * 3. 前端直接跳转到支付页面
- * 4. 用户完成支付后，收钱吧回调 /api/pay/callback 通知支付结果
- * 5. 用户被重定向回订单详情页
+ * 2. 后端调用微信小店 API 创建预订单（savePreOrder），获取 preOrderId
+ * 3. 保存 preOrderId 到订单记录
+ * 4. 调用微信小店 API 生成 H5 支付链接（generatePreOrderH5Link）
+ * 5. 返回 pay_url，前端跳转到微信小店支付页面
+ * 6. 用户使用微信支付完成后，微信小店回调 /api/pay/callback
  *
- * 收钱吧 API 文档参考：
- *   https://doc.shouqianba.com/zh-cn/api/interface/activate.html
+ * 参考：微信小店代客下单说明文档
  */
-
-const VENDOR_SN = process.env.SHOUQIANBA_VENDOR_SN || "";
-const API_KEY = process.env.SHOUQIANBA_API_KEY || "";
-// 收钱吧 API 网关地址（生产环境）
-const SHOUQIANBA_API_URL = "https://api.shouqianba.com/gateway";
-
-/**
- * 生成收钱吧 API 签名
- * 签名算法：MD5(参数按 key 排序拼接 + &key=API_KEY)
- */
-function generateSign(params: Record<string, string>): string {
-  const sortedKeys = Object.keys(params).sort();
-  const signStr = sortedKeys.map((key) => `${key}=${params[key]}`).join("&");
-  const rawStr = `${signStr}&key=${API_KEY}`;
-  return crypto.createHash("md5").update(rawStr).digest("hex").toUpperCase();
-}
-
-/**
- * 调用收钱吧 API 创建支付订单
- */
-async function createShouqianbaPayment(order: {
-  id: string;
-  total: number;
-  customer_name: string;
-  phone: string;
-}): Promise<string> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-
-  // 收钱吧 JSAPI 请求参数
-  const content = {
-    sn: order.id,                          // 商户订单号
-    total_amount: Math.round(order.total * 100), // 金额（分）
-    subject: `川名堂-${order.customer_name}`,    // 订单标题
-    body: `川名堂订单 ${order.id}`,              // 订单描述
-    notify_url: `${baseUrl}/api/pay/callback`,   // 异步回调地址
-    return_url: `${baseUrl}/order/${order.id}`,  // 同步跳转地址（支付完成后跳回）
-    pay_type: "all",                             // 支付方式：all=全部
-    terminal_sn: "auto",                         // 终端号
-    client_ip: "127.0.0.1",
-    operator: order.customer_name || "customer",
-    goods_num: 1,
-  };
-
-  const contentStr = JSON.stringify(content);
-
-  // 构建请求参数
-  const params: Record<string, string> = {
-    vendor_sn: VENDOR_SN,
-    terminal_sn: "auto",
-    app_id: "auto",
-    code: "JSAPI",
-    content: contentStr,
-  };
-
-  // 生成签名
-  params.sign = generateSign(params);
-
-  console.log("[收钱吧] 创建支付订单:", params);
-
-  const response = await fetch(SHOUQIANBA_API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json;charset=utf-8" },
-    body: JSON.stringify(params),
-  });
-
-  const result = await response.json();
-  console.log("[收钱吧] 响应:", JSON.stringify(result));
-
-  if (result.result_code === "SUCCESS") {
-    // JSAPI 返回的 pay_url 是支付页面地址
-    const bizResponse = JSON.parse(result.biz_response);
-    return bizResponse.pay_url;
-  }
-
-  throw new Error(result.error_message || "收钱吧创建支付失败");
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -110,33 +34,70 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "订单已支付" }, { status: 400 });
     }
 
+    const appId = process.env.WECHAT_STORE_APP_ID || "";
+    const appKey = process.env.WECHAT_STORE_APP_KEY || "";
+
     let payUrl: string;
 
-    // 检查是否有收钱吧配置（有商户号和密钥则调用真实 API）
-    if (VENDOR_SN && API_KEY) {
+    // 检查是否配置了微信小店
+    if (appId && appKey) {
       try {
-        payUrl = await createShouqianbaPayment({
-          id: order.id,
-          total: order.total,
-          customer_name: order.customer_name,
-          phone: order.phone,
+        const config = {
+          appId,
+          appKey,
+          merchantId: process.env.WECHAT_STORE_MERCHANT_ID || "",
+          merchantUserId: process.env.WECHAT_STORE_MERCHANT_USER_ID || "",
+          mallSn: process.env.WECHAT_STORE_MALL_SN || "",
+          mallSignature: process.env.WECHAT_STORE_MALL_SIGNATURE || "",
+        };
+
+        // 1. 创建预订单
+        const orderItems = (order.items || []) as {
+          name?: string;
+          title?: string;
+          quantity?: number;
+          price?: number;
+        }[];
+        const items = orderItems.map((item) => ({
+          title: item.name || item.title || "商品",
+          quantity: item.quantity || 1,
+          price: item.price || 0,
+        }));
+
+        const preOrder = await createPreOrder({
+          config,
+          amount: order.total,
+          items,
+          requestId: order.id,
         });
+
+        // 保存 preOrderId 到订单（用于回调时匹配）
+        updateOrderStatus(order_id, order.status, {
+          tracking_no: preOrder.preOrderId,
+        });
+
+        // 2. 生成 H5 支付链接
+        const h5Result = await generateH5Link(preOrder.preOrderId, config);
+        payUrl = h5Result.url;
+
+        console.log(`[微信小店] 支付链接已生成: order=${order_id}`);
       } catch (err) {
-        console.error("[收钱吧] API 调用失败，降级到模拟支付:", err);
-        // 如果真实 API 调用失败，降级到模拟支付
-        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+        console.error("[微信小店] API 调用失败，降级到模拟支付:", err);
+        const baseUrl =
+          process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
         payUrl = `${baseUrl}/api/pay/mock?order_id=${order_id}`;
       }
     } else {
       // 开发模式：使用模拟支付
-      console.log("[支付] 使用模拟支付（未配置收钱吧商户号）");
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+      console.log("[支付] 使用模拟支付（未配置微信小店）");
+      const baseUrl =
+        process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
       payUrl = `${baseUrl}/api/pay/mock?order_id=${order_id}`;
     }
 
-    // 记录支付类型
+    // 记录支付方式
     updateOrderStatus(order_id, order.status, {
-      pay_type: "shouqianba",
+      pay_type: "wechat_store_h5",
     });
 
     return NextResponse.json({
