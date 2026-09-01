@@ -11,7 +11,7 @@ export default function AboutPage() {
         </div>
         <div className="container-airbnb relative z-10 py-16 md:py-24 text-center">
           <h1 className="text-3xl md:text-5xl font-bold mb-4">
-            关于川名堂上地华联店
+            关于川名堂
           </h1>
           <p className="text-lg text-white/70 max-w-2xl mx-auto">
             传承四川味道，让世界爱上巴蜀美食

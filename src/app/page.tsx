@@ -155,7 +155,7 @@ export default function HomePage() {
               {/* Headline */}
               <div className="animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
                 <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-[-0.03em] text-white mb-4">
-                  川名堂上地华联店
+                  川名堂
                 </h1>
                 <p
                   className="text-xl sm:text-2xl md:text-3xl font-normal leading-relaxed mb-3 tracking-[-0.01em]"
@@ -555,7 +555,7 @@ export default function HomePage() {
                 </span>
               </h2>
               <p className="text-[var(--color-body)] leading-relaxed mb-6">
-                川名堂上地华联店深耕四川特产行业多年。我们走遍巴蜀大地，从郫县豆瓣到汉源花椒，
+                川名堂深耕四川特产行业多年。我们走遍巴蜀大地，从郫县豆瓣到汉源花椒，
                 从自贡冷吃兔到峨眉山茶，从宜宾燃面到灯影牛肉，只为寻找最地道的四川味道。
               </p>
               <p className="text-[var(--color-muted)] leading-relaxed mb-8">

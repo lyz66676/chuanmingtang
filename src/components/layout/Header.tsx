@@ -32,7 +32,7 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-2 shrink-0">
             <span className="text-2xl">🌶️</span>
             <span className="text-lg md:text-xl font-bold text-[var(--color-ink)] tracking-tight">
-              川名堂上地华联店
+              川名堂
             </span>
           </Link>
 

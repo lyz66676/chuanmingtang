@@ -10,7 +10,7 @@ export default function Footer() {
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
               <span className="text-2xl">🌶️</span>
-              <span className="text-lg font-bold text-[var(--color-ink)]">川名堂上地华联店</span>
+              <span className="text-lg font-bold text-[var(--color-ink)]">川名堂</span>
             </Link>
             <p className="text-sm text-[var(--color-muted)] leading-relaxed">
               传承四川味道，精选地道特产。<br />
@@ -86,7 +86,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-[var(--color-hairline-soft)] flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-[var(--color-muted-soft)]">
-            © 2026 川名堂上地华联店 版权所有 | 蜀ICP备2026XXXXXX号
+            © 2026 川名堂 版权所有 | 蜀ICP备2026XXXXXX号
           </p>
           <div className="flex items-center gap-4">
             <span className="text-xs text-[var(--color-muted-soft)]">🌶️ 用心传承四川味道</span>

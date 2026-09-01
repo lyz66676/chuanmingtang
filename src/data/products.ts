@@ -2,7 +2,7 @@
 // 川名堂上地华联店 - 商品数据
 // 由 scripts/parse_local_data.py 自动生成
 // 生成时间: 2026-05-20 14:36:11
-// 商品总数: 414
+// 商品总数: 298
 // ============================================================
 
 export interface Product {
@@ -53,12 +53,6 @@ export const categories: Category[] = [
     name: "调味品",
     icon: "🌶️",
     description: "正宗川菜调味料，精选上等原料，让您轻松做出地道四川美味",
-  },
-  {
-    id: "other",
-    name: "其他",
-    icon: "📦",
-    description: "四川特色商品，品质优良，融合传统与现代，实用与美观兼具",
   }
 ];
 
@@ -487,23 +481,6 @@ export const products: Product[] = [
     badge: "特惠",
   },
   {
-    id: "1544582023660653266",
-    name: "750ml神沟九寨母本园",
-    category: "wine",
-    subcategory: "酒类",
-    parentCategory: "wine",
-    price: 458.0,
-    image: "/images/products/10306008.jpg",
-    images: ["/images/products/10306008_1.jpg"],
-    descriptionImage: "/images/products/10306008_sm.jpg",
-    description: "750ml神沟九寨母本园，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500ml" },
-      { label: "类型", value: "酒类" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "3401116091978170693",
     name: "52度500ml泸州老窖1952",
     category: "wine",
@@ -554,23 +531,6 @@ export const products: Product[] = [
       { label: "产地", value: "四川" }
     ],
     badge: "特惠",
-  },
-  {
-    id: "-8878630183403892837",
-    name: "52度50ml泸州小百年（2012年）",
-    category: "wine",
-    subcategory: "酒类",
-    parentCategory: "wine",
-    price: 98.0,
-    image: "/images/products/10103001.jpg",
-    images: ["/images/products/10103001_1.jpg", "/images/products/10103001_2.jpg"],
-    descriptionImage: "/images/products/10103001_sm.jpg",
-    description: "52度50ml泸州小百年（2012年），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500ml" },
-      { label: "类型", value: "酒类" },
-      { label: "产地", value: "四川" }
-    ],
   },
   {
     id: "-6564703823411065676",
@@ -726,23 +686,6 @@ export const products: Product[] = [
     badge: "热销",
   },
   {
-    id: "2545088004421406230",
-    name: "52度500ml红标绵竹大曲",
-    category: "wine",
-    subcategory: "酒类",
-    parentCategory: "wine",
-    price: 16.8,
-    image: "/images/products/10106001.jpg",
-    images: ["/images/products/10106001_1.jpg", "/images/products/10106001_2.jpg", "/images/products/10106001_3.jpg", "/images/products/10106001_4.jpg"],
-    descriptionImage: "/images/products/10106001_sm.jpg",
-    description: "52度500ml红标绵竹大曲，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500ml" },
-      { label: "类型", value: "酒类" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "2908562545579084038",
     name: "53度1.5L瑞牛送福限量版",
     category: "wine",
@@ -770,23 +713,6 @@ export const products: Product[] = [
     images: ["/images/products/10104897_1.jpg"],
     descriptionImage: "/images/products/10104897_sm.jpg",
     description: "52度500ml水井菁翠，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500ml" },
-      { label: "类型", value: "酒类" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "6606378726166841797",
-    name: "53度500ml永福浆",
-    category: "wine",
-    subcategory: "酒类",
-    parentCategory: "wine",
-    price: 1298.0,
-    image: "/images/products/10101007.jpg",
-    images: ["/images/products/10101007_1.jpg"],
-    descriptionImage: "/images/products/10101007_sm.jpg",
-    description: "53度500ml永福浆，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
     specs: [
       { label: "净含量", value: "500ml" },
       { label: "类型", value: "酒类" },
@@ -828,57 +754,6 @@ export const products: Product[] = [
     ],
   },
   {
-    id: "-4119094460260859332",
-    name: "52度50ml泸州小特曲（2012年）",
-    category: "wine",
-    subcategory: "酒类",
-    parentCategory: "wine",
-    price: 68.0,
-    image: "/images/products/10103003.jpg",
-    images: ["/images/products/10103003_1.jpg"],
-    descriptionImage: "/images/products/10103003_sm.jpg",
-    description: "52度50ml泸州小特曲（2012年），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500ml" },
-      { label: "类型", value: "酒类" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-3859878368994966967",
-    name: "53度500ml舍得天之呼万寿吉祥（2011年）",
-    category: "wine",
-    subcategory: "酒类",
-    parentCategory: "wine",
-    price: 11980.0,
-    image: "/images/products/10109006.jpg",
-    images: ["/images/products/10109006_1.jpg"],
-    descriptionImage: "/images/products/10109006_sm.jpg",
-    description: "53度500ml舍得天之呼万寿吉祥（2011年），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500ml" },
-      { label: "类型", value: "酒类" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-2066870955552915341",
-    name: "52度375mL小五粮",
-    category: "wine",
-    subcategory: "酒类",
-    parentCategory: "wine",
-    price: 499.0,
-    image: "/images/products/10109914.jpg",
-    images: ["/images/products/10109914_1.jpg", "/images/products/10109914_2.jpg", "/images/products/10109914_3.jpg", "/images/products/10109914_4.jpg", "/images/products/10109914_5.jpg"],
-    descriptionImage: "/images/products/10109914_sm.jpg",
-    description: "52度375mL小五粮，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500ml" },
-      { label: "类型", value: "酒类" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "1016550266022874834",
     name: "53度750ml青花郎狗年纪念",
     category: "wine",
@@ -911,24 +786,6 @@ export const products: Product[] = [
       { label: "类型", value: "酒类" },
       { label: "产地", value: "四川" }
     ],
-  },
-  {
-    id: "4155489815158213819",
-    name: "52度500ml泸州老窖精品头曲D9",
-    category: "wine",
-    subcategory: "酒类",
-    parentCategory: "wine",
-    price: 198.0,
-    image: "/images/products/10103037.jpg",
-    images: ["/images/products/10103037_1.jpg"],
-    descriptionImage: "/images/products/10103037_sm.jpg",
-    description: "52度500ml泸州老窖精品头曲D9，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500ml" },
-      { label: "类型", value: "酒类" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
   },
   {
     id: "6596013986675181372",
@@ -1083,23 +940,6 @@ export const products: Product[] = [
       { label: "产地", value: "四川" }
     ],
     badge: "特惠",
-  },
-  {
-    id: "599846491871265773",
-    name: "54度沱牌老窖原浆",
-    category: "wine",
-    subcategory: "酒类",
-    parentCategory: "wine",
-    price: 1999.0,
-    image: "/images/products/10109032.jpg",
-    images: ["/images/products/10109032_1.jpg"],
-    descriptionImage: "/images/products/10109032_sm.jpg",
-    description: "54度沱牌老窖原浆，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500ml" },
-      { label: "类型", value: "酒类" },
-      { label: "产地", value: "四川" }
-    ],
   },
   {
     id: "1004317883717339715",
@@ -1284,40 +1124,6 @@ export const products: Product[] = [
     images: ["/images/products/10101705_1.jpg", "/images/products/10101705_2.jpg", "/images/products/10101705_3.jpg", "/images/products/10101705_4.jpg"],
     descriptionImage: "/images/products/10101705_sm.jpg",
     description: "52度500ml五粮液经典20，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500ml" },
-      { label: "类型", value: "酒类" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-2096612993137424411",
-    name: "750ml神沟九寨嘎美",
-    category: "wine",
-    subcategory: "酒类",
-    parentCategory: "wine",
-    price: 1180.0,
-    image: "/images/products/10306006.jpg",
-    images: ["/images/products/10306006_1.jpg"],
-    descriptionImage: "/images/products/10306006_sm.jpg",
-    description: "750ml神沟九寨嘎美，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500ml" },
-      { label: "类型", value: "酒类" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-410817338920580421",
-    name: "52度500ml泸州老窖头曲金卡（2013年）",
-    category: "wine",
-    subcategory: "酒类",
-    parentCategory: "wine",
-    price: 268.0,
-    image: "/images/products/10103034.jpg",
-    images: ["/images/products/10103034_1.jpg"],
-    descriptionImage: "/images/products/10103034_sm.jpg",
-    description: "52度500ml泸州老窖头曲金卡（2013年），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
     specs: [
       { label: "净含量", value: "500ml" },
       { label: "类型", value: "酒类" },
@@ -1574,40 +1380,6 @@ export const products: Product[] = [
     badge: "特惠",
   },
   {
-    id: "6043880084272922681",
-    name: "40g至善蒙顶石花",
-    category: "tea",
-    subcategory: "茗茶",
-    parentCategory: "tea",
-    price: 498.0,
-    image: "/images/products/20202181.jpg",
-    images: ["/images/products/20202181_1.jpg"],
-    descriptionImage: "/images/products/20202181_sm.jpg",
-    description: "40g至善蒙顶石花，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "250g" },
-      { label: "类型", value: "茗茶" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-31160568555549423",
-    name: "40g至善蒙顶甘露",
-    category: "tea",
-    subcategory: "茗茶",
-    parentCategory: "tea",
-    price: 418.0,
-    image: "/images/products/20202182.jpg",
-    images: ["/images/products/20202182_1.jpg"],
-    descriptionImage: "/images/products/20202182_sm.jpg",
-    description: "40g至善蒙顶甘露，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "250g" },
-      { label: "类型", value: "茗茶" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "2880830467126739583",
     name: "120g齐物蒙顶甘露",
     category: "tea",
@@ -1804,57 +1576,6 @@ export const products: Product[] = [
     ],
   },
   {
-    id: "-1091895253746889064",
-    name: "40g无极蒙顶石花",
-    category: "tea",
-    subcategory: "茗茶",
-    parentCategory: "tea",
-    price: 898.0,
-    image: "/images/products/20202183.jpg",
-    images: ["/images/products/20202183_1.jpg"],
-    descriptionImage: "/images/products/20202183_sm.jpg",
-    description: "40g无极蒙顶石花，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "250g" },
-      { label: "类型", value: "茗茶" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-3744272221009197862",
-    name: "40g至善蒙顶红颜",
-    category: "tea",
-    subcategory: "茗茶",
-    parentCategory: "tea",
-    price: 398.0,
-    image: "/images/products/20202187.jpg",
-    images: ["/images/products/20202187_1.jpg"],
-    descriptionImage: "/images/products/20202187_sm.jpg",
-    description: "40g至善蒙顶红颜，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "250g" },
-      { label: "类型", value: "茗茶" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-838506841755791658",
-    name: "40g无极蒙顶甘露",
-    category: "tea",
-    subcategory: "茗茶",
-    parentCategory: "tea",
-    price: 768.0,
-    image: "/images/products/20202184.jpg",
-    images: ["/images/products/20202184_1.jpg"],
-    descriptionImage: "/images/products/20202184_sm.jpg",
-    description: "40g无极蒙顶甘露，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "250g" },
-      { label: "类型", value: "茗茶" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "289705786602833686",
     name: "30g玫澜有机玫瑰花蕾茶",
     category: "tea",
@@ -1996,23 +1717,6 @@ export const products: Product[] = [
     badge: "热销",
   },
   {
-    id: "6480369694609064767",
-    name: "40g齐物蒙顶红颜",
-    category: "tea",
-    subcategory: "茗茶",
-    parentCategory: "tea",
-    price: 238.0,
-    image: "/images/products/20202189.jpg",
-    images: ["/images/products/20202189_1.jpg"],
-    descriptionImage: "/images/products/20202189_sm.jpg",
-    description: "40g齐物蒙顶红颜，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "250g" },
-      { label: "类型", value: "茗茶" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "6655846936532699655",
     name: "120g至善蒙典雪影",
     category: "tea",
@@ -2029,23 +1733,6 @@ export const products: Product[] = [
       { label: "产地", value: "四川" }
     ],
     badge: "特惠",
-  },
-  {
-    id: "-5471948187893609248",
-    name: "40g至善蒙顶雪影",
-    category: "tea",
-    subcategory: "茗茶",
-    parentCategory: "tea",
-    price: 468.0,
-    image: "/images/products/20202186.jpg",
-    images: ["/images/products/20202186_1.jpg"],
-    descriptionImage: "/images/products/20202186_sm.jpg",
-    description: "40g至善蒙顶雪影，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "250g" },
-      { label: "类型", value: "茗茶" },
-      { label: "产地", value: "四川" }
-    ],
   },
   {
     id: "-3961273479713829704",
@@ -2119,23 +1806,6 @@ export const products: Product[] = [
     badge: "热销",
   },
   {
-    id: "-4425298333548198407",
-    name: "20g玫澜有机荷叶茶",
-    category: "tea",
-    subcategory: "茗茶",
-    parentCategory: "tea",
-    price: 38.0,
-    image: "/images/products/20502058.jpg",
-    images: ["/images/products/20502058_1.jpg", "/images/products/20502058_2.jpg", "/images/products/20502058_3.jpg"],
-    descriptionImage: "/images/products/20502058_sm.jpg",
-    description: "20g玫澜有机荷叶茶，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "250g" },
-      { label: "类型", value: "茗茶" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "1634649723403193172",
     name: "凤饼赞蒙528g",
     category: "tea",
@@ -2181,23 +1851,6 @@ export const products: Product[] = [
     images: ["/images/products/20302118_1.jpg", "/images/products/20302118_2.jpg", "/images/products/20302118_3.jpg", "/images/products/20302118_4.jpg", "/images/products/20302118_5.jpg"],
     descriptionImage: "/images/products/20302118_sm.jpg",
     description: "龙团布宫336g，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "250g" },
-      { label: "类型", value: "茗茶" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "7896349502400908128",
-    name: "40g齐物蒙顶雪影",
-    category: "tea",
-    subcategory: "茗茶",
-    parentCategory: "tea",
-    price: 298.0,
-    image: "/images/products/20202190.jpg",
-    images: ["/images/products/20202190_1.jpg"],
-    descriptionImage: "/images/products/20202190_sm.jpg",
-    description: "40g齐物蒙顶雪影，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
     specs: [
       { label: "净含量", value: "250g" },
       { label: "类型", value: "茗茶" },
@@ -2458,40 +2111,6 @@ export const products: Product[] = [
     badge: "特惠",
   },
   {
-    id: "-5961409453894515486",
-    name: "100g马边天麻切片",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 88.0,
-    image: "/images/products/40502282.jpg",
-    images: ["/images/products/40502282_1.jpg", "/images/products/40502282_2.jpg"],
-    descriptionImage: "/images/products/40502282_sm.jpg",
-    description: "100g马边天麻切片，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-4504964227592077283",
-    name: "80g遛遛牛原味风干牦牛肉",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 55.0,
-    image: "/images/products/40502202.jpg",
-    images: ["/images/products/40502202_1.jpg", "/images/products/40502202_2.jpg", "/images/products/40502202_3.jpg"],
-    descriptionImage: "/images/products/40502202_sm.jpg",
-    description: "80g遛遛牛原味风干牦牛肉，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "-3260395987109722640",
     name: "400g金府王咸干花生",
     category: "snack",
@@ -2510,56 +2129,6 @@ export const products: Product[] = [
     badge: "特惠",
   },
   {
-    id: "-2357553018724400557",
-    name: "150g密奇奇青稞小桃酥",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 20.0,
-    image: "/images/products/40502212.jpg",
-    images: ["/images/products/40502212_1.jpg", "/images/products/40502212_2.jpg", "/images/products/40502212_3.jpg"],
-    descriptionImage: "/images/products/40502212_sm.jpg",
-    description: "150g密奇奇青稞小桃酥，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "1089459015341263546",
-    name: "208g遂宁鲜观音素麻花（ 原味）",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 18.0,
-    image: "/images/products/40502262.jpg",
-    images: ["/images/products/40502262_1.jpg", "/images/products/40502262_2.jpg", "/images/products/40502262_3.jpg"],
-    description: "208g遂宁鲜观音素麻花（ 原味），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "1696566733787450505",
-    name: "188g遛遛牛风干原味",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 168.0,
-    image: "/images/products/30206031.jpg",
-    images: ["/images/products/30206031_1.jpg", "/images/products/30206031_2.jpg", "/images/products/30206031_3.jpg", "/images/products/30206031_4.jpg", "/images/products/30206031_5.jpg"],
-    descriptionImage: "/images/products/30206031_sm.jpg",
-    description: "188g遛遛牛风干原味，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "3318127826553750490",
     name: "500g任市手撕板鸭（臻品）",
     category: "snack",
@@ -2570,23 +2139,6 @@ export const products: Product[] = [
     images: ["/images/products/30102091_1.jpg", "/images/products/30102091_2.jpg", "/images/products/30102091_3.jpg", "/images/products/30102091_4.jpg"],
     descriptionImage: "/images/products/30102091_sm.jpg",
     description: "500g任市手撕板鸭（臻品），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-6202578265523205732",
-    name: "400g守嘴狗五香味缠丝兔",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 88.0,
-    image: "/images/products/40502270.jpg",
-    images: ["/images/products/40502270_1.jpg", "/images/products/40502270_2.jpg", "/images/products/40502270_3.jpg", "/images/products/40502270_4.jpg", "/images/products/40502270_5.jpg", "/images/products/40502270_6.jpg", "/images/products/40502270_7.jpg", "/images/products/40502270_8.jpg", "/images/products/40502270_9.jpg", "/images/products/40502270_10.jpg", "/images/products/40502270_11.jpg", "/images/products/40502270_12.jpg", "/images/products/40502270_13.jpg", "/images/products/40502270_14.jpg", "/images/products/40502270_15.jpg", "/images/products/40502270_16.jpg", "/images/products/40502270_17.jpg", "/images/products/40502270_18.jpg", "/images/products/40502270_19.jpg", "/images/products/40502270_20.jpg", "/images/products/40502270_21.jpg", "/images/products/40502270_22.jpg", "/images/products/40502270_23.jpg", "/images/products/40502270_24.jpg", "/images/products/40502270_25.jpg", "/images/products/40502270_26.jpg", "/images/products/40502270_27.jpg", "/images/products/40502270_28.jpg", "/images/products/40502270_29.jpg", "/images/products/40502270_30.jpg", "/images/products/40502270_31.jpg", "/images/products/40502270_32.jpg", "/images/products/40502270_33.jpg", "/images/products/40502270_34.jpg", "/images/products/40502270_35.jpg", "/images/products/40502270_36.jpg", "/images/products/40502270_37.jpg", "/images/products/40502270_38.jpg", "/images/products/40502270_39.jpg", "/images/products/40502270_40.jpg", "/images/products/40502270_41.jpg", "/images/products/40502270_42.jpg", "/images/products/40502270_43.jpg", "/images/products/40502270_44.jpg", "/images/products/40502270_45.jpg", "/images/products/40502270_46.jpg", "/images/products/40502270_47.jpg", "/images/products/40502270_48.jpg", "/images/products/40502270_49.jpg", "/images/products/40502270_50.jpg", "/images/products/40502270_51.jpg", "/images/products/40502270_52.jpg", "/images/products/40502270_53.jpg", "/images/products/40502270_54.jpg", "/images/products/40502270_55.jpg", "/images/products/40502270_56.jpg", "/images/products/40502270_57.jpg", "/images/products/40502270_58.jpg", "/images/products/40502270_59.jpg", "/images/products/40502270_60.jpg", "/images/products/40502270_61.jpg", "/images/products/40502270_62.jpg", "/images/products/40502270_63.jpg", "/images/products/40502270_64.jpg", "/images/products/40502270_65.jpg", "/images/products/40502270_66.jpg", "/images/products/40502270_67.jpg", "/images/products/40502270_68.jpg", "/images/products/40502270_69.jpg", "/images/products/40502270_70.jpg", "/images/products/40502270_71.jpg", "/images/products/40502270_72.jpg", "/images/products/40502270_73.jpg", "/images/products/40502270_74.jpg", "/images/products/40502270_75.jpg", "/images/products/40502270_76.jpg", "/images/products/40502270_77.jpg", "/images/products/40502270_78.jpg", "/images/products/40502270_79.jpg", "/images/products/40502270_80.jpg", "/images/products/40502270_81.jpg", "/images/products/40502270_82.jpg", "/images/products/40502270_83.jpg", "/images/products/40502270_84.jpg", "/images/products/40502270_85.jpg", "/images/products/40502270_86.jpg", "/images/products/40502270_87.jpg", "/images/products/40502270_88.jpg", "/images/products/40502270_89.jpg", "/images/products/40502270_90.jpg", "/images/products/40502270_91.jpg", "/images/products/40502270_92.jpg", "/images/products/40502270_93.jpg", "/images/products/40502270_94.jpg", "/images/products/40502270_95.jpg", "/images/products/40502270_96.jpg", "/images/products/40502270_97.jpg", "/images/products/40502270_98.jpg", "/images/products/40502270_99.jpg", "/images/products/40502270_100.jpg", "/images/products/40502270_101.jpg", "/images/products/40502270_102.jpg", "/images/products/40502270_103.jpg", "/images/products/40502270_104.jpg", "/images/products/40502270_105.jpg", "/images/products/40502270_106.jpg", "/images/products/40502270_107.jpg", "/images/products/40502270_108.jpg", "/images/products/40502270_109.jpg", "/images/products/40502270_110.jpg", "/images/products/40502270_111.jpg", "/images/products/40502270_112.jpg", "/images/products/40502270_113.jpg", "/images/products/40502270_114.jpg", "/images/products/40502270_115.jpg", "/images/products/40502270_116.jpg", "/images/products/40502270_117.jpg", "/images/products/40502270_118.jpg", "/images/products/40502270_119.jpg", "/images/products/40502270_120.jpg", "/images/products/40502270_121.jpg", "/images/products/40502270_122.jpg", "/images/products/40502270_123.jpg", "/images/products/40502270_124.jpg", "/images/products/40502270_125.jpg", "/images/products/40502270_126.jpg", "/images/products/40502270_127.jpg", "/images/products/40502270_128.jpg", "/images/products/40502270_129.jpg", "/images/products/40502270_130.jpg", "/images/products/40502270_131.jpg", "/images/products/40502270_132.jpg", "/images/products/40502270_133.jpg", "/images/products/40502270_134.jpg", "/images/products/40502270_135.jpg", "/images/products/40502270_136.jpg", "/images/products/40502270_137.jpg", "/images/products/40502270_138.jpg", "/images/products/40502270_139.jpg", "/images/products/40502270_140.jpg", "/images/products/40502270_141.jpg", "/images/products/40502270_142.jpg", "/images/products/40502270_143.jpg", "/images/products/40502270_144.jpg", "/images/products/40502270_145.jpg", "/images/products/40502270_146.jpg", "/images/products/40502270_147.jpg", "/images/products/40502270_148.jpg", "/images/products/40502270_149.jpg", "/images/products/40502270_150.jpg", "/images/products/40502270_151.jpg", "/images/products/40502270_152.jpg", "/images/products/40502270_153.jpg", "/images/products/40502270_154.jpg"],
-    descriptionImage: "/images/products/40502270_sm.jpg",
-    description: "400g守嘴狗五香味缠丝兔，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
     specs: [
       { label: "净含量", value: "200g" },
       { label: "类型", value: "特色小吃" },
@@ -2911,23 +2463,6 @@ export const products: Product[] = [
     ],
   },
   {
-    id: "5558036922618954742",
-    name: "80g遛遛牛麻辣风干牦牛肉",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 55.0,
-    image: "/images/products/40502203.jpg",
-    images: ["/images/products/40502203_1.jpg", "/images/products/40502203_2.jpg", "/images/products/40502203_3.jpg"],
-    descriptionImage: "/images/products/40502203_sm.jpg",
-    description: "80g遛遛牛麻辣风干牦牛肉，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "465713864609120682",
     name: "260g荷花珍珠麻片",
     category: "snack",
@@ -3000,40 +2535,6 @@ export const products: Product[] = [
     badge: "特惠",
   },
   {
-    id: "-408535548153346164",
-    name: "100g家乡腊肉粽",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 12.0,
-    image: "/images/products/30206323.jpg",
-    images: ["/images/products/30206323_1.jpg", "/images/products/30206323_2.jpg", "/images/products/30206323_3.jpg"],
-    descriptionImage: "/images/products/30206323_sm.jpg",
-    description: "100g家乡腊肉粽，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-2805796398483421320",
-    name: "100g中冠鲜肉粽",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 12.0,
-    image: "/images/products/30206324.jpg",
-    images: ["/images/products/30206324_1.jpg"],
-    descriptionImage: "/images/products/30206324_sm.jpg",
-    description: "100g中冠鲜肉粽，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "-7859756497326684105",
     name: "246g苦荞青苗鲜奶沙琪玛",
     category: "snack",
@@ -3068,40 +2569,6 @@ export const products: Product[] = [
       { label: "产地", value: "四川" }
     ],
     badge: "特惠",
-  },
-  {
-    id: "919778328250306251",
-    name: "100g五谷杂粮粽",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 12.0,
-    image: "/images/products/30206367.jpg",
-    images: ["/images/products/30206367_1.jpg", "/images/products/30206367_2.jpg"],
-    descriptionImage: "/images/products/30206367_sm.jpg",
-    description: "100g五谷杂粮粽，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-5981278552607799679",
-    name: "100g蜜汁红枣粽",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 12.0,
-    image: "/images/products/30206321.jpg",
-    images: ["/images/products/30206321_1.jpg", "/images/products/30206321_2.jpg", "/images/products/30206321_3.jpg"],
-    descriptionImage: "/images/products/30206321_sm.jpg",
-    description: "100g蜜汁红枣粽，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
   },
   {
     id: "6351658272654574503",
@@ -3300,23 +2767,6 @@ export const products: Product[] = [
     badge: "特惠",
   },
   {
-    id: "8649728172848137768",
-    name: "268g苦荞黑芝麻糕",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 13.8,
-    image: "/images/products/30302145.jpg",
-    images: ["/images/products/30302145_1.jpg", "/images/products/30302145_2.jpg", "/images/products/30302145_3.jpg"],
-    descriptionImage: "/images/products/30302145_sm.jpg",
-    description: "268g苦荞黑芝麻糕，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "-5378458627749425229",
     name: "360g金府王老成都桃酥椒麻味",
     category: "snack",
@@ -3368,23 +2818,6 @@ export const products: Product[] = [
       { label: "产地", value: "四川" }
     ],
     badge: "特惠",
-  },
-  {
-    id: "-5026422701534655250",
-    name: "150g苦荞煎饼（麦芽）",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 9.0,
-    image: "/images/products/30302154.jpg",
-    images: ["/images/products/30302154_1.jpg", "/images/products/30302154_2.jpg", "/images/products/30302154_3.jpg"],
-    descriptionImage: "/images/products/30302154_sm.jpg",
-    description: "150g苦荞煎饼（麦芽），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
   },
   {
     id: "736720610845740157",
@@ -3440,58 +2873,6 @@ export const products: Product[] = [
     ],
   },
   {
-    id: "-5111975239565163893",
-    name: "188g遛遛牛风干麻辣",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 168.0,
-    image: "/images/products/30206036.jpg",
-    images: ["/images/products/30206036_1.jpg", "/images/products/30206036_2.jpg", "/images/products/30206036_3.jpg"],
-    descriptionImage: "/images/products/30206036_sm.jpg",
-    description: "188g遛遛牛风干麻辣，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-3464226386641730106",
-    name: "100g金角老四川烧烤牛肉",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 19.9,
-    image: "/images/products/40207043.jpg",
-    images: ["/images/products/40207043_1.jpg", "/images/products/40207043_2.jpg"],
-    descriptionImage: "/images/products/40207043_sm.jpg",
-    description: "100g金角老四川烧烤牛肉，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
-  },
-  {
-    id: "1335779115673996881",
-    name: "100g鲜肉蛋黄粽",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 12.0,
-    image: "/images/products/30206328.jpg",
-    images: ["/images/products/30206328_1.jpg", "/images/products/30206328_2.jpg"],
-    descriptionImage: "/images/products/30206328_sm.jpg",
-    description: "100g鲜肉蛋黄粽，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "2536768042296299056",
     name: "408g黄老五黑芝麻味核桃软糕",
     category: "snack",
@@ -3502,23 +2883,6 @@ export const products: Product[] = [
     images: ["/images/products/30202898_1.jpg", "/images/products/30202898_2.jpg"],
     descriptionImage: "/images/products/30202898_sm.jpg",
     description: "408g黄老五黑芝麻味核桃软糕，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "5262038205632497647",
-    name: "2.18kg花生嫂黑山羊羊肉汤",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 228.0,
-    image: "/images/products/30104012.jpg",
-    images: ["/images/products/30104012_1.jpg", "/images/products/30104012_2.jpg", "/images/products/30104012_3.jpg"],
-    descriptionImage: "/images/products/30104012_sm.jpg",
-    description: "2.18kg花生嫂黑山羊羊肉汤，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
     specs: [
       { label: "净含量", value: "200g" },
       { label: "类型", value: "特色小吃" },
@@ -3554,75 +2918,6 @@ export const products: Product[] = [
     images: ["/images/products/40502208_1.jpg", "/images/products/40502208_2.jpg", "/images/products/40502208_3.jpg"],
     descriptionImage: "/images/products/40502208_sm.jpg",
     description: "500g遂宁鲜野山花蜂蜜，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-6962428384031060432",
-    name: "150g润成鸡蛋干",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 7.9,
-    image: "/images/products/30206181.jpg",
-    images: ["/images/products/30206181_1.jpg", "/images/products/30206181_2.jpg", "/images/products/30206181_3.jpg"],
-    descriptionImage: "/images/products/30206181_sm.jpg",
-    description: "150g润成鸡蛋干，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
-  },
-  {
-    id: "-6922460928522106806",
-    name: "168g遛遛牛手撕麻辣",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 108.0,
-    image: "/images/products/30102044.jpg",
-    images: ["/images/products/30102044_1.jpg", "/images/products/30102044_2.jpg", "/images/products/30102044_3.jpg", "/images/products/30102044_4.jpg", "/images/products/30102044_5.jpg"],
-    descriptionImage: "/images/products/30102044_sm.jpg",
-    description: "168g遛遛牛手撕麻辣，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-6781340808554920462",
-    name: "120g密奇奇牦牛奶饼干",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 20.0,
-    image: "/images/products/40502213.jpg",
-    images: ["/images/products/40502213_1.jpg", "/images/products/40502213_2.jpg", "/images/products/40502213_3.jpg"],
-    descriptionImage: "/images/products/40502213_sm.jpg",
-    description: "120g密奇奇牦牛奶饼干，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-6780317392423137360",
-    name: "400g守嘴狗麻辣味缠丝兔",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 88.0,
-    image: "/images/products/40502269.jpg",
-    images: ["/images/products/40502269_1.jpg", "/images/products/40502269_2.jpg", "/images/products/40502269_3.jpg"],
-    descriptionImage: "/images/products/40502269_sm.jpg",
-    description: "400g守嘴狗麻辣味缠丝兔，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
     specs: [
       { label: "净含量", value: "200g" },
       { label: "类型", value: "特色小吃" },
@@ -3699,23 +2994,6 @@ export const products: Product[] = [
     ],
   },
   {
-    id: "5967799592869449546",
-    name: "100g清香原味粽",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 12.0,
-    image: "/images/products/30206320.jpg",
-    images: ["/images/products/30206320_1.jpg", "/images/products/30206320_2.jpg", "/images/products/30206320_3.jpg"],
-    descriptionImage: "/images/products/30206320_sm.jpg",
-    description: "100g清香原味粽，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "-6291909537420195242",
     name: "168g金角老四川香辣牛肉干",
     category: "snack",
@@ -3732,40 +3010,6 @@ export const products: Product[] = [
       { label: "产地", value: "四川" }
     ],
     badge: "特惠",
-  },
-  {
-    id: "-5029812931517201782",
-    name: "160g密奇奇沙棘桃酥",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 20.0,
-    image: "/images/products/40502215.jpg",
-    images: ["/images/products/40502215_1.jpg", "/images/products/40502215_2.jpg", "/images/products/40502215_3.jpg"],
-    descriptionImage: "/images/products/40502215_sm.jpg",
-    description: "160g密奇奇沙棘桃酥，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-4572745374798954484",
-    name: "168g遛遛牛手撕五香",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 108.0,
-    image: "/images/products/30102042.jpg",
-    images: ["/images/products/30102042_1.jpg", "/images/products/30102042_2.jpg", "/images/products/30102042_3.jpg", "/images/products/30102042_4.jpg"],
-    descriptionImage: "/images/products/30102042_sm.jpg",
-    description: "168g遛遛牛手撕五香，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
   },
   {
     id: "-3395433144220564697",
@@ -3802,41 +3046,6 @@ export const products: Product[] = [
     ],
   },
   {
-    id: "3872798228296451407",
-    name: "120g密奇奇青稞核桃曲奇",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 20.0,
-    image: "/images/products/40502214.jpg",
-    images: ["/images/products/40502214_1.jpg", "/images/products/40502214_2.jpg", "/images/products/40502214_3.jpg"],
-    descriptionImage: "/images/products/40502214_sm.jpg",
-    description: "120g密奇奇青稞核桃曲奇，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "4378372064280529740",
-    name: "138g润成鹌鹑蛋卤香味",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 13.8,
-    image: "/images/products/30206188.jpg",
-    images: ["/images/products/30206188_1.jpg", "/images/products/30206188_2.jpg"],
-    descriptionImage: "/images/products/30206188_sm.jpg",
-    description: "138g润成鹌鹑蛋卤香味，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
-  },
-  {
     id: "4412881868950292816",
     name: "620g哈妹巴蜀麻辣味手撕兔",
     category: "snack",
@@ -3853,23 +3062,6 @@ export const products: Product[] = [
       { label: "产地", value: "四川" }
     ],
     badge: "特惠",
-  },
-  {
-    id: "4485039949087526502",
-    name: "150g口水族香辣花生",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 9.8,
-    image: "/images/products/30205009.jpg",
-    images: ["/images/products/30205009_1.jpg", "/images/products/30205009_2.jpg", "/images/products/30205009_3.jpg", "/images/products/30205009_4.jpg"],
-    descriptionImage: "/images/products/30205009_sm.jpg",
-    description: "150g口水族香辣花生，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
   },
   {
     id: "6563522802835934360",
@@ -3899,41 +3091,6 @@ export const products: Product[] = [
     images: ["/images/products/30102084_1.jpg", "/images/products/30102084_2.jpg", "/images/products/30102084_3.jpg"],
     descriptionImage: "/images/products/30102084_sm.jpg",
     description: "750g正味山深古蔺麻辣鸡，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "8879218114320944595",
-    name: "100g润成鸡蛋干多口味",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 9.9,
-    image: "/images/products/30206189.jpg",
-    images: ["/images/products/30206189_1.jpg", "/images/products/30206189_2.jpg"],
-    descriptionImage: "/images/products/30206189_sm.jpg",
-    description: "100g润成鸡蛋干多口味，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "200g" },
-      { label: "类型", value: "特色小吃" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
-  },
-  {
-    id: "-8389796054725537914",
-    name: "82g遛遛牛五香手撕牦牛肉",
-    category: "snack",
-    subcategory: "特色小吃",
-    parentCategory: "snack",
-    price: 42.8,
-    image: "/images/products/40502201.jpg",
-    images: ["/images/products/40502201_1.jpg", "/images/products/40502201_2.jpg", "/images/products/40502201_3.jpg"],
-    descriptionImage: "/images/products/40502201_sm.jpg",
-    description: "82g遛遛牛五香手撕牦牛肉，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
     specs: [
       { label: "净含量", value: "200g" },
       { label: "类型", value: "特色小吃" },
@@ -4156,40 +3313,6 @@ export const products: Product[] = [
     badge: "特惠",
   },
   {
-    id: "-4718429245376803829",
-    name: "320g巴蜀公社碗装红烧肥肠",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 38.0,
-    image: "/images/products/40203094.jpg",
-    images: ["/images/products/40203094_1.jpg", "/images/products/40203094_2.jpg", "/images/products/40203094_3.jpg", "/images/products/40203094_4.jpg"],
-    descriptionImage: "/images/products/40203094_sm.jpg",
-    description: "320g巴蜀公社碗装红烧肥肠，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-4646010782941164791",
-    name: "320g巴蜀公社碗装干豇豆红烧肉",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 38.0,
-    image: "/images/products/40203095.jpg",
-    images: ["/images/products/40203095_1.jpg", "/images/products/40203095_2.jpg", "/images/products/40203095_3.jpg", "/images/products/40203095_4.jpg"],
-    descriptionImage: "/images/products/40203095_sm.jpg",
-    description: "320g巴蜀公社碗装干豇豆红烧肉，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "-3758830858394252131",
     name: "700ml保宁醋国醋礼盒（龙纹）",
     category: "seasoning",
@@ -4235,23 +3358,6 @@ export const products: Product[] = [
     images: ["/images/products/40205140_1.jpg", "/images/products/40205140_2.jpg", "/images/products/40205140_3.jpg"],
     descriptionImage: "/images/products/40205140_sm.jpg",
     description: "500ml手工特制五粮老醋，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-2120847572649095196",
-    name: "200g蜀香蒜蓉小龙虾调料",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 7.5,
-    image: "/images/products/40207106.jpg",
-    images: ["/images/products/40207106_1.jpg", "/images/products/40207106_2.jpg", "/images/products/40207106_3.jpg"],
-    descriptionImage: "/images/products/40207106_sm.jpg",
-    description: "200g蜀香蒜蓉小龙虾调料，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
     specs: [
       { label: "净含量", value: "500g" },
       { label: "类型", value: "调味品" },
@@ -4345,40 +3451,6 @@ export const products: Product[] = [
     ],
   },
   {
-    id: "3557645639360924934",
-    name: "400g巴蜀公社碗装夹沙肉（盒装）",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 32.8,
-    image: "/images/products/40203096.jpg",
-    images: ["/images/products/40203096_1.jpg", "/images/products/40203096_2.jpg", "/images/products/40203096_3.jpg", "/images/products/40203096_4.jpg"],
-    descriptionImage: "/images/products/40203096_sm.jpg",
-    description: "400g巴蜀公社碗装夹沙肉（盒装），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "4859606621340322838",
-    name: "150g蜀香烧鸡公",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 7.5,
-    image: "/images/products/40207107.jpg",
-    images: ["/images/products/40207107_1.jpg", "/images/products/40207107_2.jpg", "/images/products/40207107_3.jpg"],
-    descriptionImage: "/images/products/40207107_sm.jpg",
-    description: "150g蜀香烧鸡公，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "6970803803108884946",
     name: "1L保宁醋手工特制五粮老醋礼盒",
     category: "seasoning",
@@ -4432,23 +3504,6 @@ export const products: Product[] = [
     ],
   },
   {
-    id: "-7852222867751154862",
-    name: "200g美乐风味酸菜原味",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 12.8,
-    image: "/images/products/40102039.jpg",
-    images: ["/images/products/40102039_1.jpg", "/images/products/40102039_2.jpg"],
-    descriptionImage: "/images/products/40102039_sm.jpg",
-    description: "200g美乐风味酸菜原味，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "-7842250980401135096",
     name: "248g*2双罐礼盒",
     category: "seasoning",
@@ -4459,40 +3514,6 @@ export const products: Product[] = [
     images: ["/images/products/40302052_1.jpg", "/images/products/40302052_2.jpg"],
     descriptionImage: "/images/products/40302052_sm.jpg",
     description: "248g*2双罐礼盒，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-7424034826199283082",
-    name: "350g巴蜀公社坨坨肉",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 29.8,
-    image: "/images/products/40503011.jpg",
-    images: ["/images/products/40503011_1.jpg", "/images/products/40503011_2.jpg", "/images/products/40503011_3.jpg"],
-    descriptionImage: "/images/products/40503011_sm.jpg",
-    description: "350g巴蜀公社坨坨肉，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-7158526270539544438",
-    name: "340g高金火锅午餐肉（红版）",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 19.9,
-    image: "/images/products/40203100.jpg",
-    images: ["/images/products/40203100_1.jpg", "/images/products/40203100_2.jpg", "/images/products/40203100_3.jpg", "/images/products/40203100_4.jpg"],
-    descriptionImage: "/images/products/40203100_sm.jpg",
-    description: "340g高金火锅午餐肉（红版），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
     specs: [
       { label: "净含量", value: "500g" },
       { label: "类型", value: "调味品" },
@@ -4536,41 +3557,6 @@ export const products: Product[] = [
     badge: "特惠",
   },
   {
-    id: "605632718291815697",
-    name: "350g美乐麻辣酱",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 14.5,
-    image: "/images/products/40102009.jpg",
-    images: ["/images/products/40102009_1.jpg", "/images/products/40102009_2.jpg", "/images/products/40102009_3.jpg", "/images/products/40102009_4.jpg"],
-    descriptionImage: "/images/products/40102009_sm.jpg",
-    description: "350g美乐麻辣酱，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "1096666303000693023",
-    name: "190g*3金装松茸牦牛肉酱",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 158.0,
-    image: "/images/products/40102033.jpg",
-    images: ["/images/products/40102033_1.jpg"],
-    descriptionImage: "/images/products/40102033_sm.jpg",
-    description: "190g*3金装松茸牦牛肉酱，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
-  },
-  {
     id: "2290886155770744237",
     name: "405g好人家酸爽麻辣老坛酸菜鱼",
     category: "seasoning",
@@ -4586,41 +3572,6 @@ export const products: Product[] = [
       { label: "类型", value: "调味品" },
       { label: "产地", value: "四川" }
     ],
-  },
-  {
-    id: "2719910310595546060",
-    name: "500g东汉汤圆粉",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 11.5,
-    image: "/images/products/40203014.jpg",
-    images: ["/images/products/40203014_1.jpg", "/images/products/40203014_2.jpg"],
-    descriptionImage: "/images/products/40203014_sm.jpg",
-    description: "500g东汉汤圆粉，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "2830501370882310591",
-    name: "340g高金庄园黑猪午餐肉罐头",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 36.8,
-    image: "/images/products/40203101.jpg",
-    images: ["/images/products/40203101_1.jpg", "/images/products/40203101_2.jpg", "/images/products/40203101_3.jpg"],
-    descriptionImage: "/images/products/40203101_sm.jpg",
-    description: "340g高金庄园黑猪午餐肉罐头，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
   },
   {
     id: "4534918453044659861",
@@ -4675,24 +3626,6 @@ export const products: Product[] = [
     ],
   },
   {
-    id: "6404694273274824948",
-    name: "160g蜀香麻辣粉蒸肉调料",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 7.8,
-    image: "/images/products/40203008.jpg",
-    images: ["/images/products/40203008_1.jpg", "/images/products/40203008_2.jpg"],
-    descriptionImage: "/images/products/40203008_sm.jpg",
-    description: "160g蜀香麻辣粉蒸肉调料，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
-  },
-  {
     id: "7398304788290618580",
     name: "210g好人家藤椒鱼调料",
     category: "seasoning",
@@ -4743,58 +3676,6 @@ export const products: Product[] = [
       { label: "类型", value: "调味品" },
       { label: "产地", value: "四川" }
     ],
-  },
-  {
-    id: "8651342368454560908",
-    name: "200g美乐风味酸菜香辣味",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 12.8,
-    image: "/images/products/40102040.jpg",
-    images: ["/images/products/40102040_1.jpg", "/images/products/40102040_2.jpg"],
-    descriptionImage: "/images/products/40102040_sm.jpg",
-    description: "200g美乐风味酸菜香辣味，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "8889906088400537651",
-    name: "250g色湾藏香猪腊肉（新）",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 98.0,
-    image: "/images/products/50304820.jpg",
-    images: ["/images/products/50304820_1.jpg", "/images/products/50304820_2.jpg", "/images/products/50304820_3.jpg"],
-    descriptionImage: "/images/products/50304820_sm.jpg",
-    description: "250g色湾藏香猪腊肉（新），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-8666353820538679355",
-    name: "350g美乐豆花蘸水",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 18.5,
-    image: "/images/products/40102011.jpg",
-    images: ["/images/products/40102011_1.jpg", "/images/products/40102011_2.jpg", "/images/products/40102011_3.jpg", "/images/products/40102011_4.jpg", "/images/products/40102011_5.jpg"],
-    descriptionImage: "/images/products/40102011_sm.jpg",
-    description: "350g美乐豆花蘸水，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
   },
   {
     id: "-8485591976165094461",
@@ -4884,23 +3765,6 @@ export const products: Product[] = [
     badge: "特惠",
   },
   {
-    id: "-1755082576768579297",
-    name: "120g蜀香现捞酱卤卤料（五香味）",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 6.5,
-    image: "/images/products/40203082.jpg",
-    images: ["/images/products/40203082_1.jpg", "/images/products/40203082_2.jpg", "/images/products/40203082_3.jpg"],
-    descriptionImage: "/images/products/40203082_sm.jpg",
-    description: "120g蜀香现捞酱卤卤料（五香味），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "-813289260996867696",
     name: "90g自家卤",
     category: "seasoning",
@@ -4971,58 +3835,6 @@ export const products: Product[] = [
     badge: "特惠",
   },
   {
-    id: "1909098287454964817",
-    name: "1.08kg中冠粽香团圆",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 168.0,
-    image: "/images/products/50203051.jpg",
-    images: ["/images/products/50203051_1.jpg", "/images/products/50203051_2.jpg"],
-    descriptionImage: "/images/products/50203051_sm.jpg",
-    description: "1.08kg中冠粽香团圆，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "2120548153020270208",
-    name: "350g巴蜀公社梅菜扣肉",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 29.8,
-    image: "/images/products/40203091.jpg",
-    images: ["/images/products/40203091_1.jpg", "/images/products/40203091_2.jpg", "/images/products/40203091_3.jpg", "/images/products/40203091_4.jpg"],
-    descriptionImage: "/images/products/40203091_sm.jpg",
-    description: "350g巴蜀公社梅菜扣肉，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
-  },
-  {
-    id: "3072049900199168385",
-    name: "520g潼川豆豉盒装",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 58.0,
-    image: "/images/products/40103005.jpg",
-    images: ["/images/products/40103005_1.jpg", "/images/products/40103005_2.jpg"],
-    descriptionImage: "/images/products/40103005_sm.jpg",
-    description: "520g潼川豆豉盒装，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "3922984347491846760",
     name: "1kg若男优级龙须挂面",
     category: "seasoning",
@@ -5050,23 +3862,6 @@ export const products: Product[] = [
     images: ["/images/products/40502238_1.jpg", "/images/products/40502238_2.jpg", "/images/products/40502238_3.jpg"],
     descriptionImage: "/images/products/40502238_sm.jpg",
     description: "300g资阳资味藕粉，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "6337478412980012895",
-    name: "240g蜀香担担面调料",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 10.8,
-    image: "/images/products/40202003.jpg",
-    images: ["/images/products/40202003_1.jpg", "/images/products/40202003_2.jpg", "/images/products/40202003_3.jpg", "/images/products/40202003_4.jpg", "/images/products/40202003_5.jpg"],
-    descriptionImage: "/images/products/40202003_sm.jpg",
-    description: "240g蜀香担担面调料，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
     specs: [
       { label: "净含量", value: "500g" },
       { label: "类型", value: "调味品" },
@@ -5110,23 +3905,6 @@ export const products: Product[] = [
     badge: "特惠",
   },
   {
-    id: "7750702233839224941",
-    name: "186g蜀香重庆小面调料",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 10.8,
-    image: "/images/products/40203034.jpg",
-    images: ["/images/products/40203034_1.jpg", "/images/products/40203034_2.jpg"],
-    descriptionImage: "/images/products/40203034_sm.jpg",
-    description: "186g蜀香重庆小面调料，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "8364316280861773668",
     name: "120g蜀味双椒（礼盒）",
     category: "seasoning",
@@ -5160,40 +3938,6 @@ export const products: Product[] = [
       { label: "产地", value: "四川" }
     ],
     badge: "特惠",
-  },
-  {
-    id: "-8729260502560978861",
-    name: "25g冻干松茸",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 318.0,
-    image: "/images/products/40502055.jpg",
-    images: ["/images/products/40502055_1.jpg", "/images/products/40502055_2.jpg"],
-    descriptionImage: "/images/products/40502055_sm.jpg",
-    description: "25g冻干松茸，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-8517191283169801102",
-    name: "300g眉州东坡经典甜烧白",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 38.0,
-    image: "/images/products/40203078.jpg",
-    images: ["/images/products/40203078_1.jpg"],
-    descriptionImage: "/images/products/40203078_sm.jpg",
-    description: "300g眉州东坡经典甜烧白，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
   },
   {
     id: "-8412418423761518473",
@@ -5232,41 +3976,6 @@ export const products: Product[] = [
     badge: "特惠",
   },
   {
-    id: "-4791582186479205443",
-    name: "160g蜀香五香粉蒸肉调料",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 7.8,
-    image: "/images/products/40203007.jpg",
-    images: ["/images/products/40203007_1.jpg", "/images/products/40203007_2.jpg"],
-    descriptionImage: "/images/products/40203007_sm.jpg",
-    description: "160g蜀香五香粉蒸肉调料，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
-  },
-  {
-    id: "-4457581726037948451",
-    name: "150g蜀香大盘鸡",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 7.5,
-    image: "/images/products/40207108.jpg",
-    images: ["/images/products/40207108_1.jpg", "/images/products/40207108_2.jpg", "/images/products/40207108_3.jpg"],
-    descriptionImage: "/images/products/40207108_sm.jpg",
-    description: "150g蜀香大盘鸡，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "-3159717685174122640",
     name: "266+40g吉香居香菜芯",
     category: "seasoning",
@@ -5285,23 +3994,6 @@ export const products: Product[] = [
     badge: "特惠",
   },
   {
-    id: "-2229247227731950400",
-    name: "250g色湾藏香猪川味香肠（新）",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 98.0,
-    image: "/images/products/50304818.jpg",
-    images: ["/images/products/50304818_1.jpg", "/images/products/50304818_2.jpg", "/images/products/50304818_3.jpg"],
-    descriptionImage: "/images/products/50304818_sm.jpg",
-    description: "250g色湾藏香猪川味香肠（新），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "-1185280128365540759",
     name: "1kg若男优级宽宽挂面",
     category: "seasoning",
@@ -5312,23 +4004,6 @@ export const products: Product[] = [
     images: ["/images/products/40502103_1.jpg", "/images/products/40502103_2.jpg", "/images/products/40502103_3.jpg", "/images/products/40502103_4.jpg"],
     descriptionImage: "/images/products/40502103_sm.jpg",
     description: "1kg若男优级宽宽挂面，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-911630812872881245",
-    name: "888g潼川豆豉盒装",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 98.0,
-    image: "/images/products/40103006.jpg",
-    images: ["/images/products/40103006_1.jpg"],
-    descriptionImage: "/images/products/40103006_sm.jpg",
-    description: "888g潼川豆豉盒装，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
     specs: [
       { label: "净含量", value: "500g" },
       { label: "类型", value: "调味品" },
@@ -5421,42 +4096,6 @@ export const products: Product[] = [
       { label: "类型", value: "调味品" },
       { label: "产地", value: "四川" }
     ],
-  },
-  {
-    id: "3287661547167305481",
-    name: "190g五香味松茸牦牛肉酱",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 58.0,
-    image: "/images/products/40102030.jpg",
-    images: ["/images/products/40102030_1.jpg", "/images/products/40102030_2.jpg", "/images/products/40102030_3.jpg"],
-    descriptionImage: "/images/products/40102030_sm.jpg",
-    description: "190g五香味松茸牦牛肉酱，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
-  },
-  {
-    id: "3354320284188429417",
-    name: "600g东汉原窝醪糟",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 16.8,
-    image: "/images/products/40204018.jpg",
-    images: ["/images/products/40204018_1.jpg", "/images/products/40204018_2.jpg", "/images/products/40204018_3.jpg"],
-    descriptionImage: "/images/products/40204018_sm.jpg",
-    description: "600g东汉原窝醪糟，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
   },
   {
     id: "4605567067874479797",
@@ -5812,41 +4451,6 @@ export const products: Product[] = [
     badge: "特惠",
   },
   {
-    id: "-9200351037099786019",
-    name: "380g潼川豆豉坛装",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 128.0,
-    image: "/images/products/40103010.jpg",
-    images: ["/images/products/40103010_1.jpg", "/images/products/40103010_2.jpg", "/images/products/40103010_3.jpg"],
-    descriptionImage: "/images/products/40103010_sm.jpg",
-    description: "380g潼川豆豉坛装，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "4549434337284736325",
-    name: "280g锦官堂潼川豆豉（麻辣味）",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 30.0,
-    image: "/images/products/40401038.jpg",
-    images: ["/images/products/40401038_1.jpg"],
-    descriptionImage: "/images/products/40401038_sm.jpg",
-    description: "280g锦官堂潼川豆豉（麻辣味），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
-  },
-  {
     id: "7607977238223211399",
     name: "100g灿林黑木耳",
     category: "seasoning",
@@ -6060,24 +4664,6 @@ export const products: Product[] = [
     badge: "特惠",
   },
   {
-    id: "6955036543026743612",
-    name: "280g锦官堂潼川豆豉（香辣味）",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 30.0,
-    image: "/images/products/40401039.jpg",
-    images: ["/images/products/40401039_1.jpg", "/images/products/40401039_2.jpg", "/images/products/40401039_3.jpg"],
-    descriptionImage: "/images/products/40401039_sm.jpg",
-    description: "280g锦官堂潼川豆豉（香辣味），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
-  },
-  {
     id: "4114524268714674564",
     name: "1.8L仙餐小榨浓香菜籽油",
     category: "seasoning",
@@ -6160,24 +4746,6 @@ export const products: Product[] = [
     images: ["/images/products/40101047_1.jpg", "/images/products/40101047_2.jpg"],
     descriptionImage: "/images/products/40101047_sm.jpg",
     description: "180g四川跷脚牛肉酱，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
-  },
-  {
-    id: "2629929390895288021",
-    name: "260g肥肠米粉",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 12.8,
-    image: "/images/products/40302071.jpg",
-    images: ["/images/products/40302071_1.jpg", "/images/products/40302071_2.jpg", "/images/products/40302071_3.jpg"],
-    descriptionImage: "/images/products/40302071_sm.jpg",
-    description: "260g肥肠米粉，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
     specs: [
       { label: "净含量", value: "500g" },
       { label: "类型", value: "调味品" },
@@ -6501,23 +5069,6 @@ export const products: Product[] = [
     badge: "特惠",
   },
   {
-    id: "8216348512547653927",
-    name: "120g蜀香糖醋排骨调料",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 6.5,
-    image: "/images/products/40207104.jpg",
-    images: ["/images/products/40207104_1.jpg", "/images/products/40207104_2.jpg", "/images/products/40207104_3.jpg"],
-    descriptionImage: "/images/products/40207104_sm.jpg",
-    description: "120g蜀香糖醋排骨调料，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "716388714968076185",
     name: "280g迷昜红瓶装方糖",
     category: "seasoning",
@@ -6528,41 +5079,6 @@ export const products: Product[] = [
     images: ["/images/products/30206041_1.jpg"],
     descriptionImage: "/images/products/30206041_sm.jpg",
     description: "280g迷昜红瓶装方糖，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
-  },
-  {
-    id: "4847312704160219263",
-    name: "240g蜀香牛肉面调料",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 10.8,
-    image: "/images/products/40207102.jpg",
-    images: ["/images/products/40207102_1.jpg", "/images/products/40207102_2.jpg", "/images/products/40207102_3.jpg"],
-    descriptionImage: "/images/products/40207102_sm.jpg",
-    description: "240g蜀香牛肉面调料，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-7791039486640504629",
-    name: "350g巴蜀公社芽菜扣肉",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 29.8,
-    image: "/images/products/40203092.jpg",
-    images: ["/images/products/40203092_1.jpg", "/images/products/40203092_2.jpg", "/images/products/40203092_3.jpg", "/images/products/40203092_4.jpg"],
-    descriptionImage: "/images/products/40203092_sm.jpg",
-    description: "350g巴蜀公社芽菜扣肉，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
     specs: [
       { label: "净含量", value: "500g" },
       { label: "类型", value: "调味品" },
@@ -6588,23 +5104,6 @@ export const products: Product[] = [
     ],
   },
   {
-    id: "-7134599147972638199",
-    name: "400g巴蜀公社碗装龙眼肉",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 32.8,
-    image: "/images/products/40203097.jpg",
-    images: ["/images/products/40203097_1.jpg", "/images/products/40203097_2.jpg", "/images/products/40203097_3.jpg", "/images/products/40203097_4.jpg"],
-    descriptionImage: "/images/products/40203097_sm.jpg",
-    description: "400g巴蜀公社碗装龙眼肉，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "-6623881854388058471",
     name: "500g雅妹子青羌腊肉|",
     category: "seasoning",
@@ -6620,24 +5119,6 @@ export const products: Product[] = [
       { label: "类型", value: "调味品" },
       { label: "产地", value: "四川" }
     ],
-  },
-  {
-    id: "-5919662133956296376",
-    name: "350g巴蜀公社碗装粉蒸肉",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 29.8,
-    image: "/images/products/40203093.jpg",
-    images: ["/images/products/40203093_1.jpg", "/images/products/40203093_2.jpg", "/images/products/40203093_3.jpg", "/images/products/40203093_4.jpg"],
-    descriptionImage: "/images/products/40203093_sm.jpg",
-    description: "350g巴蜀公社碗装粉蒸肉，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
   },
   {
     id: "-4091492049038849804",
@@ -6658,58 +5139,6 @@ export const products: Product[] = [
     badge: "特惠",
   },
   {
-    id: "-3470890429669945838",
-    name: "1.39kg中冠粽享美好",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 298.0,
-    image: "/images/products/50203049.jpg",
-    images: ["/images/products/50203049_1.jpg", "/images/products/50203049_2.jpg"],
-    descriptionImage: "/images/products/50203049_sm.jpg",
-    description: "1.39kg中冠粽享美好，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-2905872993402664123",
-    name: "200g肥肠袋装",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 28.0,
-    image: "/images/products/40302060.jpg",
-    images: ["/images/products/40302060_1.jpg", "/images/products/40302060_2.jpg", "/images/products/40302060_3.jpg", "/images/products/40302060_4.jpg", "/images/products/40302060_5.jpg", "/images/products/40302060_6.jpg"],
-    descriptionImage: "/images/products/40302060_sm.jpg",
-    description: "200g肥肠袋装，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
-  },
-  {
-    id: "-1815402150841922714",
-    name: "100g蜀香红烧王调料（咸甜味）",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 6.5,
-    image: "/images/products/40207103.jpg",
-    images: ["/images/products/40207103_1.jpg", "/images/products/40207103_2.jpg", "/images/products/40207103_3.jpg"],
-    descriptionImage: "/images/products/40207103_sm.jpg",
-    description: "100g蜀香红烧王调料（咸甜味），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "-1203585757156390029",
     name: "248g红烧肥肠",
     category: "seasoning",
@@ -6720,59 +5149,6 @@ export const products: Product[] = [
     images: ["/images/products/40302050_1.jpg", "/images/products/40302050_2.jpg", "/images/products/40302050_3.jpg", "/images/products/40302050_4.jpg"],
     descriptionImage: "/images/products/40302050_sm.jpg",
     description: "248g红烧肥肠，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
-  },
-  {
-    id: "-1163160553498000873",
-    name: "180g素燃面",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 11.9,
-    image: "/images/products/40201034.jpg",
-    images: ["/images/products/40201034_1.jpg", "/images/products/40201034_2.jpg", "/images/products/40201034_3.jpg"],
-    descriptionImage: "/images/products/40201034_sm.jpg",
-    description: "180g素燃面，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
-  },
-  {
-    id: "1330219700138691694",
-    name: "190g山椒味松茸牦牛肉酱",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 58.0,
-    image: "/images/products/40102032.jpg",
-    images: ["/images/products/40102032_1.jpg", "/images/products/40102032_2.jpg", "/images/products/40102032_3.jpg"],
-    descriptionImage: "/images/products/40102032_sm.jpg",
-    description: "190g山椒味松茸牦牛肉酱，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "1846216819229542511",
-    name: "350g美乐香辣酱",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 14.5,
-    image: "/images/products/40102008.jpg",
-    images: ["/images/products/40102008_1.jpg"],
-    descriptionImage: "/images/products/40102008_sm.jpg",
-    description: "350g美乐香辣酱，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
     specs: [
       { label: "净含量", value: "500g" },
       { label: "类型", value: "调味品" },
@@ -6796,24 +5172,6 @@ export const products: Product[] = [
       { label: "类型", value: "调味品" },
       { label: "产地", value: "四川" }
     ],
-  },
-  {
-    id: "2241273024950125300",
-    name: "190g香辣味松茸牦牛肉酱",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 58.0,
-    image: "/images/products/40102031.jpg",
-    images: ["/images/products/40102031_1.jpg", "/images/products/40102031_2.jpg", "/images/products/40102031_3.jpg"],
-    descriptionImage: "/images/products/40102031_sm.jpg",
-    description: "190g香辣味松茸牦牛肉酱，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-    badge: "特惠",
   },
   {
     id: "4557474232854924537",
@@ -6885,40 +5243,6 @@ export const products: Product[] = [
     ],
   },
   {
-    id: "7905794731658462664",
-    name: "400g巴蜀公社碗装八宝饭",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 26.0,
-    image: "/images/products/40203098.jpg",
-    images: ["/images/products/40203098_1.jpg", "/images/products/40203098_2.jpg", "/images/products/40203098_3.jpg", "/images/products/40203098_4.jpg"],
-    descriptionImage: "/images/products/40203098_sm.jpg",
-    description: "400g巴蜀公社碗装八宝饭，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "8670597362591943759",
-    name: "248g笋子肥肠",
-    category: "seasoning",
-    subcategory: "调味品",
-    parentCategory: "seasoning",
-    price: 39.8,
-    image: "/images/products/40302051.jpg",
-    images: ["/images/products/40302051_1.jpg", "/images/products/40302051_2.jpg", "/images/products/40302051_3.jpg", "/images/products/40302051_4.jpg", "/images/products/40302051_5.jpg"],
-    descriptionImage: "/images/products/40302051_sm.jpg",
-    description: "248g笋子肥肠，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "净含量", value: "500g" },
-      { label: "类型", value: "调味品" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
     id: "-8327103004749052598",
     name: "80g好人家宫保鸡丁调料",
     category: "seasoning",
@@ -6971,306 +5295,6 @@ export const products: Product[] = [
   },
 
   // ---- 其他 ----
-  {
-    id: "2918706730719137660",
-    name: "30ml云朵玫瑰消毒液",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 99.0,
-    image: "/images/products/20502029.jpg",
-    images: ["/images/products/20502029_1.jpg", "/images/products/20502029_2.jpg", "/images/products/20502029_3.jpg"],
-    descriptionImage: "/images/products/20502029_sm.jpg",
-    description: "30ml云朵玫瑰消毒液，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-4488932946996017290",
-    name: "大相藏茶茶器套组",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 680.0,
-    image: "/images/products/50305367.jpg",
-    images: ["/images/products/50305367_1.jpg", "/images/products/50305367_2.jpg", "/images/products/50305367_3.jpg"],
-    descriptionImage: "/images/products/50305367_sm.jpg",
-    description: "大相藏茶茶器套组，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-3806632003301457915",
-    name: "钛美1.8L陶瓷内胆钛焖壶",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 698.0,
-    image: "/images/products/50315260.jpg",
-    images: ["/images/products/50315260_1.jpg", "/images/products/50315260_2.jpg", "/images/products/50315260_3.jpg"],
-    descriptionImage: "/images/products/50315260_sm.jpg",
-    description: "钛美1.8L陶瓷内胆钛焖壶，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "153047449516262507",
-    name: "20ml云朵玫瑰消毒口喷",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 88.0,
-    image: "/images/products/20502028.jpg",
-    images: ["/images/products/20502028_1.jpg", "/images/products/20502028_2.jpg", "/images/products/20502028_3.jpg"],
-    descriptionImage: "/images/products/20502028_sm.jpg",
-    description: "20ml云朵玫瑰消毒口喷，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "4448603250319902334",
-    name: "蒙典1456青山盖碗",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 108.0,
-    image: "/images/products/50305396.jpg",
-    images: ["/images/products/50305396_1.jpg"],
-    descriptionImage: "/images/products/50305396_sm.jpg",
-    description: "蒙典1456青山盖碗，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-1823616387457987396",
-    name: "三界800ml长嘴煮茶器（Z1）",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 499.0,
-    image: "/images/products/50315205.jpg",
-    images: ["/images/products/50315205_1.jpg", "/images/products/50315205_2.jpg"],
-    descriptionImage: "/images/products/50315205_sm.jpg",
-    description: "三界800ml长嘴煮茶器（Z1），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-1038017642587732291",
-    name: "蒙典1456水韵杯",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 78.0,
-    image: "/images/products/50305395.jpg",
-    images: ["/images/products/50305395_1.jpg"],
-    description: "蒙典1456水韵杯，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-131315542490201312",
-    name: "大相藏茶品茗杯",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 58.0,
-    image: "/images/products/50305369.jpg",
-    images: ["/images/products/50305369_1.jpg"],
-    description: "大相藏茶品茗杯，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "8171639132976532419",
-    name: "大相藏茶泡茶师",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 358.0,
-    image: "/images/products/50305394.jpg",
-    images: ["/images/products/50305394_1.jpg", "/images/products/50305394_2.jpg"],
-    descriptionImage: "/images/products/50305394_sm.jpg",
-    description: "大相藏茶泡茶师，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-6867065191255554393",
-    name: "三界 台式抽水器 （CS1- Q）",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 299.0,
-    image: "/images/products/50315210.jpg",
-    images: ["/images/products/50315210_1.jpg", "/images/products/50315210_2.jpg", "/images/products/50315210_3.jpg", "/images/products/50315210_4.jpg"],
-    descriptionImage: "/images/products/50315210_sm.jpg",
-    description: "三界 台式抽水器 （CS1- Q），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-3347321936430021969",
-    name: "400ml云朵玫瑰随行杯",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 35.0,
-    image: "/images/products/20502021.jpg",
-    images: ["/images/products/20502021_1.jpg", "/images/products/20502021_2.jpg", "/images/products/20502021_3.jpg"],
-    descriptionImage: "/images/products/20502021_sm.jpg",
-    description: "400ml云朵玫瑰随行杯，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "4282484925059646458",
-    name: "120g卓玛姑娘独立便携式蜂蜜条",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 35.0,
-    image: "/images/products/40502294.jpg",
-    images: ["/images/products/40502294_1.jpg", "/images/products/40502294_2.jpg", "/images/products/40502294_3.jpg"],
-    descriptionImage: "/images/products/40502294_sm.jpg",
-    description: "120g卓玛姑娘独立便携式蜂蜜条，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "6239970704393848015",
-    name: "三界玻璃侧把壶 （BLH-1）",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 268.0,
-    image: "/images/products/50315206.jpg",
-    images: ["/images/products/50315206_1.jpg", "/images/products/50315206_2.jpg"],
-    descriptionImage: "/images/products/50315206_sm.jpg",
-    description: "三界玻璃侧把壶 （BLH-1），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "8004667456661373150",
-    name: "三界西壶 （H1）",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 580.0,
-    image: "/images/products/50315209.jpg",
-    images: ["/images/products/50315209_1.jpg", "/images/products/50315209_2.jpg", "/images/products/50315209_3.jpg"],
-    descriptionImage: "/images/products/50315209_sm.jpg",
-    description: "三界西壶 （H1），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-8688263793835031543",
-    name: "三界茶盘套装（CP-Q3）",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 2760.0,
-    image: "/images/products/50315207.jpg",
-    images: ["/images/products/50315207_1.jpg", "/images/products/50315207_2.jpg"],
-    descriptionImage: "/images/products/50315207_sm.jpg",
-    description: "三界茶盘套装（CP-Q3），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-5767002841678723666",
-    name: "弘建山羊角养壶笔",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 95.0,
-    image: "/images/products/50305281.jpg",
-    images: ["/images/products/50305281_1.jpg", "/images/products/50305281_2.jpg"],
-    description: "弘建山羊角养壶笔，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-5814516867402871769",
-    name: "大相藏茶瓷盖碗",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 98.0,
-    image: "/images/products/50305368.jpg",
-    images: ["/images/products/50305368_1.jpg"],
-    description: "大相藏茶瓷盖碗，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "-3532615063326340273",
-    name: "36g*10卓玛姑娘-蜂蜜柠檬汁瓶盖",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 55.0,
-    image: "/images/products/40502290.jpg",
-    images: ["/images/products/40502290_1.jpg", "/images/products/40502290_2.jpg"],
-    descriptionImage: "/images/products/40502290_sm.jpg",
-    description: "36g*10卓玛姑娘-蜂蜜柠檬汁瓶盖，来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
-  {
-    id: "4186844426664758870",
-    name: "三界白色电热水杯 （BX1）",
-    category: "other",
-    subcategory: "其他",
-    parentCategory: "other",
-    price: 298.0,
-    image: "/images/products/50315204.jpg",
-    images: ["/images/products/50315204_1.jpg", "/images/products/50315204_2.jpg"],
-    descriptionImage: "/images/products/50315204_sm.jpg",
-    description: "三界白色电热水杯 （BX1），来自四川的正宗特产，每一件都承载着巴蜀文化的独特魅力。支持门店配送、到店自提。川名堂上地华联店精选四川地道特产，品质保证，让您足不出户品味巴蜀风情。",
-    specs: [
-      { label: "类型", value: "其他" },
-      { label: "产地", value: "四川" }
-    ],
-  },
 ];
 
 // 推荐商品：优先取带badge的商品，不足则按销量排序补充
@@ -7295,4 +5319,4 @@ export function getProductsByCategory(category: string): Product[] {
 
 export function getCategoryById(id: string): Category | undefined {
   return categories.find((c) => c.id === id);
-}
+}
